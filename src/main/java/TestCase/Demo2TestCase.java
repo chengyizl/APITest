@@ -39,7 +39,7 @@ public class Demo2TestCase {
 
     @BeforeTest
     public void preConditions() {
-        String path = "TestCaseData/testDataDemo2.json";
+        String path = "TestCaseData/testDemo1.json";
         String jsondata = IOUtils.readFiletoString(path,"utf-8");
         suit = JsonUtils.parseJsonData(jsondata,TestSuit.class);
         caseList = suit.getCaseList();

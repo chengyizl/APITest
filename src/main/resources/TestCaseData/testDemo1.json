@@ -1,0 +1,23 @@
+{
+  "baseurl": "http://47.111.8.172:9278",
+  "caseList": [
+    {
+      "id": "jkasjdlf",
+      "name": "name2",
+      "dBsql": {
+        "jdbc": {
+          "url": "jdbc:mysql://47.111.1.51:3306/ots_lima_test?characterEncoding=UTF-8&allowMultiQueries=true&serverTimezone=Asia/Shanghai",
+          "username": "ots_lima",
+          "password": "Ots_lima@123"
+        },
+        "sqlList": [
+          "SELECT  name FROM ots_lima_test.user_info WHERE id='698174553439862784';"
+        ]
+      },
+      "request":{
+        "username":"liangshuihe",
+        "password":"123456"
+      }
+    }
+  ]
+}
