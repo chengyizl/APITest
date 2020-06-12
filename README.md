@@ -1,6 +1,149 @@
 # APITest
-接口测试
+接口测试工具
 
+
+### 使用说明
+#### 目录结构说明
+- common  公共类目录
+- - listener  测试结果监听类，后续根据需求实现
+- - utils     一些通用工具类
+- data   数据提取器
+- pojo   基础实例类
+- TestCase  测试类，用于运行的测试用例
+- resources     资源文件夹
+- - TeseCaseData  存放测试数据文件，为json格式
+- - testNg        存放testNg配置文件，每个xml文件可以配置运行指定的那些测试类等一些配置
+
+#### 模板测试用例Demo2TestCase.java 运行步骤
+- 1.TestCase包中查看模板测试用例文件Demo2TestCase.java 文件，查看测试用例编写
+- 2.确认Demo2TestCase.java中 preConditions方法中读取的数据文件TestCaseData/testDemo1.json是存在
+- 3.在resource中查看测试类中读取的数据，确认无误
+- 4.在resource/testNg/testng.xml 文件中查看class配置，确认配置的测试类是Demo2TestCase(可以配置多个class)
+- 5.查看pom文件中suiteXmlFile 配置的内容，确认是读取resource/testNg/testng.xml内容(只能有一条该数据)
+- 6.项目根目录运行命令 mvn clean test
+- 7.项目根目录 运行allure serve target或allure-results  查看结果报告
+
+
+#### 测试用例使用的json文件编写
+1. 字段内容参考resources/TestCaseData/testDemo1.json
+2. 字段类型参考resources/TestCaseData/testDemo1.json
+
+#### 测试用例java编写
+##### 设置请求信息
+````
+// 设置请求表单数据和路径信息
+given().
+       formParam("formParamName", "value1").  
+       queryParam("queryParamName", "value2").
+when().
+       post("/something");
+
+````
+##### 获取响应
+````
+//获取响应_links.next.href字段内容
+String nextTitleLink =
+given().
+        param("param_name", "param_value").
+when().
+        get("/title").
+then().
+        contentType(JSON).
+        body("title", equalTo("My Title")).
+extract().
+        path("_links.next.href")
+
+
+//获取整个响应对象
+Response response = 
+given().
+        param("param_name", "param_value").
+when().
+        get("/title").
+then().
+        contentType(JSON).
+        body("title", equalTo("My Title")).
+extract().
+        response(); 
+
+//获取响应头信息
+Headers allHeaders = response.getHeaders();
+String headerName = response.getHeader("headerName");
+
+//获取响应cookie
+Map<String,String> cookies = response.getCookies();
+String cookie = response.getCookie("cookiename");
+
+````
+##### 响应头字段内容断言
+````
+// 响应cookie断言
+get("/x").then().assertThat().cookie("cookieName", "cookieValue"). ..
+get("/x").then().assertThat().cookies("cookieName1", "cookieValue1", "cookieName2", "cookieValue2")
+get("/x").then().assertThat().cookies("cookieName1", "cookieValue1", "cookieName2", containsString("Value2"))
+
+// 响应状态码断言
+get("/x").then().assertThat().statusCode(200)
+get("/x").then().assertThat().statusLine("something")
+get("/x").then().assertThat().statusLine(containsString("some"))
+
+// 响应头断言
+get("/x").then().assertThat().header("headerName", "headerValue")
+get("/x").then().assertThat().headers("headerName1", "headerValue1", "headerName2", "headerValue2")
+get("/x").then().assertThat().headers("headerName1", "headerValue1", "headerName2", containsString("Value2"))
+````
+
+##### 响应时间断言
+````
+// 获取响应时间
+long timeInMs = get("/lotto").time()
+
+//以指定单位获取响应时间
+long timeInSeconds = get("/lotto").timeIn(SECONDS);
+
+// 响应时间断言，默认单位是毫秒
+when().
+      get("/lotto").
+then().
+      time(lessThan(2000L)); // Milliseconds
+
+// 响应时间断言，不能大于指定值
+when().
+      get("/lotto").
+then().
+      time(lessThan(2L), SECONDS);
+
+````
+
+##### 响应body的字段内容断言
+```
+返回json内容如下:
+{
+"lotto":{
+ "lottoId":5,
+ "winning-numbers":[2,45,34,23,7,5,3],
+ "winners":[{
+   "winnerId":23,
+   "numbers":[2,45,34,23,3,5]
+ },{
+   "winnerId":54,
+   "numbers":[52,3,12,11,18,22]
+ }]
+}
+}
+
+对lottoId进行断言
+get("/lotto").then().body("lotto.lottoId", equalTo(5));
+对值的范围区间断言
+get("/lotto").then().body("lotto.winners.winnerId", hasItems(23, 54));
+
+```
+
+
+
+
+项目接口测试框架使用的是rest-assured  更多功能[点击此处跳转官网](https://github.com/rest-assured/rest-assured/wiki/Usage)
+### 其他注意事项
 #### mybatis 自动生成代码
 - resources目录下修改 generatorConfig.xml 文件
 - 在idea的右侧栏点击Maven,选中添加的Mybatis-generator插件并运行
@@ -15,8 +158,6 @@
 
 #### testng 使用testng.xml
 - mvn clean test -Dsurefire.suiteXmlFiles=src/test/java/testSuit/testng.xml
-
-
 
 
 
@@ -66,11 +207,6 @@
 - 4.2.1 allure generate target/allure-results  先生成报告到目录
 - 4.2.2  allure open allure-results  然后再执行打开命令
 
-#### 使用说明
-- 1.TestCase包中新建测试类，执行指定的测试用例
-- 2.测试过程中使用的数据库等信息通过json文件传入，文件放在资源文件夹(resources)的TestCaseData目录下
-- 3.项目中默认读resource/testNg/testng.xml 文件(pom文件suiteXmlFile字段修改)，执行文件中配置的测试类。
-- 4.mvn clean test 运行resource/testNg/testng.xml 中配置的测试类
-- 5.allure serve target/allure-results  查看结果报告
+
 
 

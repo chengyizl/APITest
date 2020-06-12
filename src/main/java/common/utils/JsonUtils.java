@@ -39,6 +39,7 @@ public class JsonUtils {
      * @param <T>
      * @return
      */
+    @SuppressWarnings("unchecked")
     public static  <T extends Object> T parseJsonData(String JSONStr,Class<T> claz){
         Object object = null;
         try {
@@ -61,6 +62,7 @@ public class JsonUtils {
      * 返回类型: List<T>
      * @throws
      */
+    @SuppressWarnings("unchecked")
     public static <T> List<T> JSON2List(String jsonStr, Class<T> claz) {
         List<T> result = null;
         try{
