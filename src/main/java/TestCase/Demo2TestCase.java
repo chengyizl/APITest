@@ -57,7 +57,7 @@ public class Demo2TestCase {
                          .body("{\"username\":\""+testCase.getRequest().getUsername()+"\",\"password\":\""+testCase.getRequest().getPassword()+"\"}")
                          .request(Method.POST,"/login/v2")
                          .then()
-                          .body("data.user_name",equalTo(testCase.getRequest().getUsername()))
+                         .body("data.user_name",equalTo(testCase.getRequest().getUsername()))
                         .extract().
                         response();
         String token = response.path("data.token");// response body 如下
@@ -128,11 +128,21 @@ public class Demo2TestCase {
                         .then()
                         .body("message", equalTo("出票失败"));
 
+
+
     }
+    /*public void testCase4(){
+           baseURI = "https://lmyxtest-web.limachufa.com";
+           given()
+              .formParam(s:"",)
+
+           ;
+
+    }*/
 
     @Story("mock数据进行多次测试")
     @Test(description = "通过mock数据进行多次测试时",dataProviderClass = DataProviders.class,dataProvider = "dataFromArray")
-    public void testCase4(Object object){
+    public void testCase5(Object object){
         Assert.assertNotNull(object);
     }
 

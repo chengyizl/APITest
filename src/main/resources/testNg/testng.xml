@@ -18,7 +18,8 @@
         <!--</groups>-->
 
         <classes>
-            <class name="TestCase.Demo2TestCase"/>
+            <!--<class name="TestCase.Demo2TestCase"/>-->
+            <class name="TestCase.limayouxuanCase"></class>
         </classes>
     </test>
 </suite>

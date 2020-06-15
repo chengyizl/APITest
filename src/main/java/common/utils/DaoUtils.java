@@ -62,6 +62,7 @@ public class DaoUtils {
 
     }
 
+    @SuppressWarnings("unchecked")
     public static SqlSession getSession(Class tClass,String db){
         getMapper(tClass,db);
         return sqlSession;
