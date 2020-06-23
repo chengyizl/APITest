@@ -26,4 +26,12 @@ public class TestRequest {
     @JsonProperty("password")
     private String password;
 
+    //h5登录使用手机号和验证码
+    @JsonProperty("phone")
+    private String phone;
+    //h5登录使用手机号和验证码
+    @JsonProperty("captcha")
+    private String captcha;
+
+
 }
