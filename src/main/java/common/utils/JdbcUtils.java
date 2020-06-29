@@ -53,7 +53,7 @@ public class JdbcUtils {
             if(statement==null){
                 setStatement(jdbc);
             }
-            resultSet = statement.executeQuery(sql);
+            statement.executeUpdate(sql);
             logger.info("数据库操作语句执行成功");
         }catch (SQLException e){
             e.printStackTrace();

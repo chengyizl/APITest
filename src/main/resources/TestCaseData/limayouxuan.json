@@ -1,0 +1,19 @@
+{
+  "baseurl": "https://lmyxtest-web.limachufa.com",
+  "caseList": [
+    {
+      "id": "jkasjdlf",
+      "name": "name2",
+      "dBsql": {
+        "jdbc": {
+          "url": "jdbc:mysql://47.111.15.229:3306/ots_lima_test?characterEncoding=UTF-8&allowMultiQueries=true&serverTimezone=Asia/Shanghai",
+          "username": "ots_lima",
+          "password": "Ots_lima@123"
+        },
+        "sqlList": [
+          "delete from ots_lima_test.member_info where phone = '18727083743';"
+        ]
+      }
+    }
+  ]
+}
