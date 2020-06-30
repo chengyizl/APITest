@@ -929,7 +929,7 @@ public class limayouxuanCase {
                 .then()
                 //断言resultCode=7115
                 //.body("resultCode",equalTo("7115"));
-                .body("message",equalTo("出票失败") );
+                .body("message",equalTo("出票失败")              );
 
     }
 
