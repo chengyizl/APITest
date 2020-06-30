@@ -823,6 +823,7 @@ public class limayouxuanCase {
     }
 
 
+
     //火车票~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     //火车票预订，购买当前过去的日期
     @Test(testName ="火车票" ,description = "火车票，购买当前过去的日期")
@@ -928,7 +929,7 @@ public class limayouxuanCase {
                 .then()
                 //断言resultCode=7115
                 //.body("resultCode",equalTo("7115"));
-                .body("message",equalTo("出票失败"));
+                .body("message",equalTo("出票失败") );
 
     }
 
