@@ -84,6 +84,7 @@ public class limayouxuanCase {
     }
      */
 
+    /*
     //h5登录~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
       //正常登录成功
      @Test(testName ="登录" ,description = "正常登录成功")
@@ -158,6 +159,7 @@ public class limayouxuanCase {
                         response();
 
     }
+     */
    //首页~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     //首页未传入tanantid、cityCode
     @Test(testName ="首页" ,description = "首页-未传入tanantid、cityCode")
@@ -259,12 +261,12 @@ public class limayouxuanCase {
         baseURI = "https://lmyxtest-web.limachufa.com";
         given()
                 .formParam("tenantId","519142041838419968")
-                .formParam("scenicName","")
-                .formParam("districtCode","")
-                .formParam("scenicLevel","")
-                .formParam("provinceCode","")
+                .formParam("scenicName","11111111111")
+                .formParam("districtCode","11111111")
+                .formParam("scenicLevel","1111111111")
+                .formParam("provinceCode","11111")
                 .formParam("sortType","")
-                .formParam("pageSize","1")
+                .formParam("pageSize","100")
                 .formParam("currentPage","1")
                 .formParam("count","0")
                 .formParam("loading","")
@@ -929,10 +931,9 @@ public class limayouxuanCase {
                 .then()
                 //断言resultCode=7115
                 //.body("resultCode",equalTo("7115"));
-                .body("message",equalTo("出票失败")              );
+                .body("message",equalTo("出票失败"));
 
     }
 
-
-
+    
 }
