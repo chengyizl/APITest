@@ -18,6 +18,7 @@ import static io.restassured.RestAssured.*;
 
 
 import org.testng.Assert;
+import org.testng.ITestContext;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
@@ -47,9 +48,9 @@ public class Demo2TestCase {
     }
 
 //    @Test(dataProvider = "dataFromJson",dataProviderClass = DataProviders.class)
-    @Story("关联接口测试")
-    @Test(description = "先登录，然后通过登录接口信息进行下面的测试")
-    public void testCase(){
+    @Story("关联接口测试-登录")
+    @Test(description = "先登录，然后将登录的响应传递给ITestContest")
+    public void testCaseLogin(ITestContext context){
         TestCase testCase = suit.getCaseList().get(0);
         baseURI = suit.getBaseurl();
         Response response =
@@ -61,6 +62,15 @@ public class Demo2TestCase {
                          .body("data.user_name",equalTo(testCase.getRequest().getUsername()))
                         .extract().
                         response();
+        // 将响应放到上下文中 ITestContext
+        context.setAttribute("LoginSponse",response);
+
+    }
+    @Story("关联接口测试-登录后查询")
+    @Test(dependsOnMethods = "testCaseLogin",description = "通过ITestContest获取到")
+    public void testCaseAfterLogin(ITestContext context){
+        // 从上下文中ITestContext获取登录后的响应
+        Response response =(Response) context.getAttribute("LoginSponse");
         String token = response.path("data.token");// response body 如下
 //        {
 //            "code":8200,
