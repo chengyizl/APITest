@@ -23,10 +23,11 @@ import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 import pojo.TestCase;
 import pojo.TestSuit;
+import redis.clients.jedis.Jedis;
 
 import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+
 @Epic("一级标题")
 @Feature("二级标题")
 @Listeners()
@@ -149,6 +150,89 @@ public class Demo2TestCase {
 
 
 
+    @Story("操作redis")
+    @Test(description = "通过mock数据进行多次测试时")
+    public void testCase6(Object object){
+        //连接redis服务器，121.43.167.127:6379
+        Jedis jedis = new Jedis("121.43.167.127", 6379);
+        //权限认证 输入密码
+        jedis.auth("Lishi@s127");
 
+        //###############################################################字符串操作######################################################
+        // 存储字符串
+        jedis.set("TestString","xinxin");//向key-->TestString中放入了value-->xinxin
+        //拼接 字符串
+        jedis.append("TestString", " is my lover");
+        // 获取制定key的字符串
+        String message = jedis.get("TestString");
+        // 删除指定的字符串类型key
+        jedis.del("TestString");
+
+        //###############################################################Map操作######################################################
+        Map<String,String>  map = new HashMap<>();
+        map.put("name", "xinxin");
+        map.put("age", "22");
+        map.put("qq", "123456");
+        // 存储map
+        jedis.hmset("user",map);;
+        //取出user中的name，执行结果:[minxr]-->注意结果是一个泛型的List
+        //第一个参数是存入redis中map对象的key，后面跟的是放入map中的对象的key，后面的key可以跟多个，是可变参数
+        List<String> rsmap = jedis.hmget("user", "name", "age", "qq");
+        //删除map中的某个键值
+        jedis.hdel("user","age");
+        // 判断是否存在 key为user的map
+        boolean exit = jedis.exists("user");
+        //返回map对象中的所有key
+        Set<String> keys = jedis.hkeys("user");
+        //返回map对象中的所有value
+        List<String> values = jedis.hvals("user");
+
+
+
+
+        //###############################################################list操作######################################################
+        //开始前，先移除所有的内容
+        jedis.del("java framework");
+        // 插入key为java framework 起始下标为0，不限长度的list
+        jedis.lrange("java framework",0,-1);
+        //先向key java framework中从左存放三条数据
+        jedis.lpush("java framework","spring");
+        jedis.lpush("java framework","struts");
+        jedis.lpush("java framework","hibernate");
+        //再取出所有数据jedis.lrange是按范围取出，
+        // 第一个是key，第二个是起始位置，第三个是结束位置，jedis.llen获取长度 -1表示取得所有
+        List<String> list = jedis.lrange("java framework",0,-1);
+        jedis.del("java framework");
+        //向key java framework中从右存放三条数据
+        jedis.rpush("java framework","spring");
+        jedis.rpush("java framework","struts");
+        jedis.rpush("java framework","hibernate");
+        //再取出所有数据jedis.lrange是按范围取出，
+        // 第一个是key，第二个是起始位置，第三个是结束位置，jedis.llen获取长度 -1表示取得所有
+        jedis.lrange("java framework",0,-1);
+
+
+
+        //###############################################################set操作######################################################
+
+        //添加
+        jedis.sadd("user","liuling");
+        jedis.sadd("user","xinxin");
+        jedis.sadd("user","ling");
+        jedis.sadd("user","zhangxinxin");
+        jedis.sadd("user","who");
+        //移除noname,可指定多个value
+        jedis.srem("user","who");
+        //获取所有加入的value
+        jedis.smembers("user");
+        //判断 who 是否是user集合的元素
+        jedis.sismember("user", "who");
+        jedis.srandmember("user");
+        //返回集合的元素个数
+        jedis.scard("user");
+        //删除set中随机多个元素
+        jedis.spop("user",jedis.scard("user"));
+
+    }
 
 }
