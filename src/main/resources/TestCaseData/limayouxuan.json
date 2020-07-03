@@ -11,7 +11,8 @@
           "password": "Ots_lima@123"
         },
         "sqlList": [
-          "delete from ots_lima_test.member_info where phone = '18727083743';"
+          "delete from ots_lima_test.member_info where phone = '18727083743';",
+          "INSERT INTO member_collect ( id, content_id, member_id, is_deleted, create_time, is_visible, content_type )\nVALUES\n\t(\n\t\t99,\n\t\t1,\n\t\t727945672514338816,\n\t\t1,\n\t\tNOW(),\n\t\t1,\n\t2)"
         ]
       }
     }

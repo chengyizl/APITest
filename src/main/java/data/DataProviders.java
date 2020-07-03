@@ -1,6 +1,7 @@
 package data;
 
 import common.utils.IOUtils;
+import org.testng.ITestContext;
 import org.testng.annotations.DataProvider;
 import pojo.JsonData;
 import pojo.TestCase;
@@ -44,6 +45,16 @@ public class DataProviders {
        mock.add("asdfa");
 
        return mock.iterator();
+
+    }
+
+    @DataProvider(name = "Collection")
+    public static Iterator<Object> Collection(ITestContext context){
+        List<Object> mock = new LinkedList<>();
+        mock.add(context.getAttribute(""));
+        mock.add(context.getAttribute(""));
+
+        return mock.iterator();
 
     }
 

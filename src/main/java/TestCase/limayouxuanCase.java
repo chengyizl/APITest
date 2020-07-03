@@ -20,9 +20,8 @@ import static org.hamcrest.Matchers.equalTo;
 
 
 import org.testng.Assert;
-import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Listeners;
-import org.testng.annotations.Test;
+import org.testng.ITestContext;
+import org.testng.annotations.*;
 import pojo.TestCase;
 import pojo.TestSuit;
 import redis.clients.jedis.Jedis;
@@ -43,10 +42,13 @@ public class limayouxuanCase {
     // 短时间内可以多次使用的验证码
     private String code;
 
+    //收藏id
+    private String Collectionid;
+
     List<Cookie> cookies;
     ArrayList<TestCase> caseList;
 
-    @BeforeTest
+    @BeforeClass
     public void preConditions() {
         String path = "TestCaseData/limayouxuan.json";
         String jsondata = IOUtils.readFiletoString(path, "utf-8");
@@ -58,60 +60,25 @@ public class limayouxuanCase {
         //权限认证
         jedis.auth("Lishi@s127");
     }
-    /*
-    //@Test(dataProvider = "dataFromJson",dataProviderClass = DataProviders.class)
-    @Story("关联接口测试")
-    @Test(description = "先登录，然后通过登录接口信息进行下面的测试")
-    public void testCase(){
-        TestCase testCase = suit.getCaseList().get(0);
-        baseURI = suit.getBaseurl();
-        Response response =
-                given()
-                        .contentType("application/json; charset=UTF-8")
-                        .body("{\"username\":\""+testCase.getRequest().getUsername()+"\",\"password\":\""+testCase.getRequest().getPassword()+"\"}")
-                        .request(Method.POST,"/login/v2")
-                        .then()
-                        .body("data.user_name",equalTo(testCase.getRequest().getUsername()))
-                        .extract().
-                        response();
-        String token = response.path("data.token");// response body 如下
-//        {
-//            "code":8200,
-//                "data":{
-//            "id":"1185109714373382146",
-//                    "image":"",
-//                    "token":"3b1bd0b7-6bac-482d-86e6-62d6e1bb5a7c",
-//                    "user_name":"liangshuihe"
-//        },
-//            "message":"请求成功",
-//                "success":true
-//        }
-        String LSSESSIONID = response.getHeader("cookie");
-
-        given()
-                .cookie("LSSESSIONID", LSSESSIONID)
-                .cookie("token", token)
-                .request(Method.POST, "/mapInfo/getList")
-                .then()
-                .body("message", equalTo("查询成功"));
-    }
-     */
-
 
     //h5登录~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     //正常登录成功
     @Test(testName = "登录", description = "正常登录成功")
-    public void login() {
-        baseURI = "https://lmyxtest-web.limachufa.com";
+    public void login(ITestContext context) {
+        baseURI = suit.getBaseurl();
         // 通过redis 获取验证码
-        if(code==null||code.isEmpty()) {
+        if(!jedis.exists("OTS_CLOUD_LIMAYOUXUAN_TEST_PREFIX_519142041838419968_18727083743")) {
             //TODO  调用获取验证码
-
-            // redis 的key格式是 OTS_3.1.0_DEV_PREFIX_+tenantId+_phone
-            String codeMessage = jedis.get("OTS_3.1.0_DEV_PREFIX_557254765256376320_13588283723");
-            code = codeMessage.substring(codeMessage.length() - 6);
+            given()
+                    .formParam("tenantId", "519142041838419968")
+                    .formParam("phone", "18727083743")
+                    .request(Method.POST, "/web/wechat/sendCode")
+                    .then();
+            // .body("resultCode", equalTo(8500));
         }
-
+            // redis 的key格式是 OTS_3.1.0_DEV_PREFIX_+tenantId+_phone
+            String codeMessage = jedis.get("OTS_CLOUD_LIMAYOUXUAN_TEST_PREFIX_519142041838419968_18727083743");
+            code = codeMessage.substring(codeMessage.length() - 6);
         given()
                 .formParam("tenantId", "519142041838419968")
                 .formParam("phone", "18727083743")
@@ -122,12 +89,12 @@ public class limayouxuanCase {
                 .then()
                 //.body("message", equalTo(""));
                 .body("resultCode", equalTo(8200));
-    }
+        }
 
     //未传入租户id
     @Test(testName = "登录", description = "租户id为空")
     public void login_error() {
-        baseURI = "https://lmyxtest-web.limachufa.com";
+        baseURI = suit.getBaseurl();
         given()
                 .formParam("tenantId", "")
                 .formParam("phone", "")
@@ -148,20 +115,20 @@ public class limayouxuanCase {
             TestCase testCase = caseList.get(0);
 
             ResultSet resultSet = JdbcUtils.getResult(testCase.getDBsql().getSqlList().get(0), testCase.getDBsql().getJdbc());
-//            while (resultSet.next()){
-//                tem = resultSet.getString("name");
-//            }
-            baseURI = "https://lmyxtest-web.limachufa.com";
+            baseURI = suit.getBaseurl();
 
             // 通过redis 获取验证码
-            if(code==null||code.isEmpty()) {
+            if(!jedis.exists("OTS_CLOUD_LIMAYOUXUAN_TEST_PREFIX_519142041838419968_18727083743")) {
                 //TODO  调用获取验证码
-
-
-                // redis 的key格式是 OTS_3.1.0_DEV_PREFIX_+tenantId+_phone
-                String codeMessage = jedis.get("OTS_3.1.0_DEV_PREFIX_557254765256376320_13588283723");
-                code = codeMessage.substring(codeMessage.length() - 6);
+                given()
+                        .formParam("tenantId", "519142041838419968")
+                        .formParam("phone", "18727083743")
+                        .request(Method.POST, "/web/wechat/sendCode")
+                        .then();
             }
+            // redis 的key格式是 OTS_3.1.0_DEV_PREFIX_+tenantId+_phone
+            String codeMessage = jedis.get("OTS_CLOUD_LIMAYOUXUAN_TEST_PREFIX_519142041838419968_18727083743");
+            code = codeMessage.substring(codeMessage.length() - 6);
 
             Response response =
                     given()
@@ -176,15 +143,15 @@ public class limayouxuanCase {
                             .body("data.isNewMember", equalTo(true))
                             .extract().
                             response();
-        } finally {
-            JdbcUtils.closeConn();
+        }catch (Exception e){
+            e.printStackTrace();
         }
-        Response response1 =
-                given()
+            Response response1 =
+                    given()
                         .contentType("application/x-www-form-urlencoded;charset=UTF-8")
                         .formParam("tenantId", "519142041838419968")
                         .formParam("phone", "18727083743")
-                        .formParam("captcha", "653771")
+                        .formParam("captcha", code)
                         .formParam("openId", "")
                         .formParam("type", "")
                         .request(Method.POST, "/web/wechat/login")
@@ -199,7 +166,7 @@ public class limayouxuanCase {
     //首页未传入tanantid、cityCode
     @Test(testName = "首页", description = "首页-未传入tanantid、cityCode")
     public void Homepage_null() {
-        baseURI = "https://lmyxtest-web.limachufa.com";
+        baseURI = suit.getBaseurl();
         given()
                 .formParam("tenantId", "")
                 .formParam("cityCode", "")
@@ -213,7 +180,7 @@ public class limayouxuanCase {
     //首页传入tanantid、cityCode
     @Test(testName = "首页", description = "首页-传入tanantid、cityCode")
     public void Homepage() {
-        baseURI = "https://lmyxtest-web.limachufa.com";
+        baseURI = suit.getBaseurl();
         given()
                 .formParam("tenantId", "519142041838419968")
                 .formParam("cityCode", "330100000000")
@@ -228,7 +195,7 @@ public class limayouxuanCase {
     //广告位-tenantId为空
     @Test(testName = "广告位", description = "广告位-tenantId为空")
     public void adsense_null() {
-        baseURI = "https://lmyxtest-web.limachufa.com";
+        baseURI = suit.getBaseurl();
         given()
                 // .formParam("tenantId", "")
                 // .formParam("areaNumbers", "")
@@ -241,7 +208,7 @@ public class limayouxuanCase {
     //广告位输入正确的tenantId
     @Test(testName = "广告位", description = "广告位-输入正确的tenantId")
     public void adsense() {
-        baseURI = "https://lmyxtest-web.limachufa.com";
+        baseURI = suit.getBaseurl();
         given()
                 .formParam("tenantId", "519142041838419968")
                 .formParam("areaNumbers", "banner001")
@@ -249,14 +216,14 @@ public class limayouxuanCase {
                 .then()
                 //查询成功
                 .body("message", equalTo("查询成功!"));
-        //banner001下有2条数据
-        //.body("data.banner001",hasSize(2));
+                //banner001下有2条数据
+               //.body("data.banner001",hasSize(2));
     }
 
     //广告位随意输入tenantId
     @Test(testName = "广告位", description = "广告位-随意输入tenantId")
     public void adsense_random() {
-        baseURI = "https://lmyxtest-web.limachufa.com";
+        baseURI = suit.getBaseurl();
         given()
                 .formParam("tenantId", "1")
                 .formParam("areaNumbers", "1")
@@ -268,10 +235,10 @@ public class limayouxuanCase {
     }
 
     //门票~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    //门票列表为空
+    //门票list列表为空
     @Test(testName = "门票", description = "景区列表为空")
     public void scenic_null() {
-        baseURI = "https://lmyxtest-web.limachufa.com";
+        baseURI = suit.getBaseurl();
         given()
                 /*.formParam("tenantId","")
                 .formParam("scenicName","")
@@ -296,10 +263,10 @@ public class limayouxuanCase {
 
     }
 
-    //门票列表1条数据
-    @Test(testName = "门票", description = "景区列表1条数据")
+    //景区list列表显示1条数据
+    @Test(testName = "门票", description = "景区list列表显示1条数据")
     public void scenic_one() {
-        baseURI = "https://lmyxtest-web.limachufa.com";
+        baseURI = suit.getBaseurl();
         given()
                 .formParam("tenantId","519142041838419968")
                 .formParam("scenicName","11111111111")
@@ -323,10 +290,10 @@ public class limayouxuanCase {
 
     }
 
-    //门票列表15条数据
+    //景区列表15条数据
     @Test(testName = "门票", description = "景区列表15条数据")
     public void scenic_15() {
-        baseURI = "https://lmyxtest-web.limachufa.com";
+        baseURI = suit.getBaseurl();
         given()
                 .formParam("tenantId", "519142041838419968")
                 .formParam("scenicName", "")
@@ -352,10 +319,10 @@ public class limayouxuanCase {
 
     }
 
-    //门景区详情未传入id
-    @Test(testName = "门票", description = "景区详情未传入id")
+    //景区详情未传入景区scenicId
+    @Test(testName = "门票", description = "景区详情未传入景区scenicId")
     public void ScenicDetailById_null() {
-        baseURI = "https://lmyxtest-web.limachufa.com";
+        baseURI = suit.getBaseurl();
         given()
                 .formParam("tenantId", "")
                 .formParam("memberId", "")
@@ -369,10 +336,10 @@ public class limayouxuanCase {
 
     }
 
-    //门景区详情传入id，tenantId/memberId可传可不传
-    @Test(testName = "门票", description = "景区详情传入id")
+    //景区详情传入景区scenicId，tenantId/memberId可传可不传
+    @Test(testName = "门票", description = "景区详情传入景区scenicId")
     public void ScenicDetailById() {
-        baseURI = "https://lmyxtest-web.limachufa.com";
+        baseURI = suit.getBaseurl();
         given()
                 .formParam("tenantId", "519142041838419968")
                 .formParam("memberId", "712708494783938560")
@@ -385,10 +352,10 @@ public class limayouxuanCase {
 
     }
 
-    //景区详情传入错误id
-    @Test(testName = "门票", description = "景区详情输入错误id")
+    //景区详情输入错误的景区scenicId
+    @Test(testName = "门票", description = "景区详情输入错误的景区scenicId")
     public void ScenicDetailById_errors() {
-        baseURI = "https://lmyxtest-web.limachufa.com";
+        baseURI = suit.getBaseurl();
         given()
                 .formParam("tenantId", "519142041838419968")
                 .formParam("memberId", "712708494783938560")
@@ -401,10 +368,10 @@ public class limayouxuanCase {
 
     }
 
-    //门票，景区门票id为空692335480447959040
+    //景区门票id为空
     @Test(testName = "门票", description = "门票id为空")
     public void ticket_id_null() {
-        baseURI = "https://lmyxtest-web.limachufa.com";
+        baseURI = suit.getBaseurl();
         given()
                 .formParam("id", "")
                 .formParam("tenantId", "")
@@ -416,10 +383,10 @@ public class limayouxuanCase {
 
     }
 
-    //门票-景区id不为空692335480447959040
+    //输入正确的景区id
     @Test(testName = "门票", description = "输入正确的景区id")
     public void ticket() {
-        baseURI = "https://lmyxtest-web.limachufa.com";
+        baseURI = suit.getBaseurl();
         given()
                 .formParam("id", "692335480447959040")
                 .formParam("tenantId", "")
@@ -431,10 +398,10 @@ public class limayouxuanCase {
 
     }
 
-    //景区门票错误id
-    @Test(testName = "门票", description = "门票输入错误的id")
+    //输入错误的景区id
+    @Test(testName = "门票", description = "输入错误的景区id")
     public void ticket_errors() {
-        baseURI = "https://lmyxtest-web.limachufa.com";
+        baseURI = suit.getBaseurl();
         given()
                 .formParam("id", "692335480447959040")
                 .formParam("tenantId", "")
@@ -446,10 +413,10 @@ public class limayouxuanCase {
 
     }
 
-    //门票日历价格查询
-    @Test(testName = "门票", description = "日历-门票id未输入")
+    //门票日历价格查询-未传入景区id
+    @Test(testName = "门票", description = "门票日历价格查询-未传入景区id")
     public void queryTicketDayPrice_null() {
-        baseURI = "https://lmyxtest-web.limachufa.com";
+        baseURI = suit.getBaseurl();
         given()
                 .formParam("id", "")
                 .formParam("startDate", "")
@@ -462,10 +429,10 @@ public class limayouxuanCase {
 
     }
 
-    //门票日历价格-输入id
-    @Test(testName = "门票", description = "日历-门票传入id")
+    //门票日历价格-输入景区id
+    @Test(testName = "门票", description = "门票日历价格-输入景区id")
     public void queryTicketDayPrice() {
-        baseURI = "https://lmyxtest-web.limachufa.com";
+        baseURI = suit.getBaseurl();
         given()
                 .formParam("id", "692332412155199488")
                 .formParam("startDate", "2020-06-22")
@@ -482,7 +449,7 @@ public class limayouxuanCase {
     //酒店列表为空
     @Test(testName = "酒店", description = "酒店列表为空")
     public void hotel_null() {
-        baseURI = "https://lmyxtest-web.limachufa.com";
+        baseURI = suit.getBaseurl();
         given()
                 .formParam("tenantId", "")
                 .formParam("district", "")
@@ -508,7 +475,7 @@ public class limayouxuanCase {
     //酒店列表显示1条数据
     @Test(testName = "酒店", description = "酒店列表显示1条数据")
     public void hotel_one() {
-        baseURI = "https://lmyxtest-web.limachufa.com";
+        baseURI = suit.getBaseurl();
         given()
                 .formParam("tenantId", "")
                 .formParam("district", "")
@@ -531,10 +498,10 @@ public class limayouxuanCase {
 
     }
 
-    //酒店列表显示10条数据
-    @Test(testName = "酒店", description = "酒店列表显示10条数据")
+    //酒店列表显示11条数据
+    @Test(testName = "酒店", description = "酒店列表显示11条数据")
     public void hotel_ten() {
-        baseURI = "https://lmyxtest-web.limachufa.com";
+        baseURI = suit.getBaseurl();
         given()
                 .formParam("tenantId", "")
                 .formParam("district", "")
@@ -560,7 +527,7 @@ public class limayouxuanCase {
     //酒店列表传入错误日期
     @Test(testName = "酒店", description = "酒店列表输入错误日期")
     public void hotel_errors() {
-        baseURI = "https://lmyxtest-web.limachufa.com";
+        baseURI = suit.getBaseurl();
         given()
                 .formParam("tenantId", "")
                 .formParam("district", "")
@@ -581,36 +548,46 @@ public class limayouxuanCase {
                 .then()
                 .body("resultCode", equalTo(8200));
     }
-
+/*
     //酒店详情为空
     @Test(testName = "酒店", description = "酒店详情为空")
-    public void hotel_queryById() {
-        baseURI = "https://lmyxtest-web.limachufa.com";
+    public void hotel_queryById_null() {
+        baseURI = suit.getBaseurl();
         given()
                 .formParam("tenantId", "")
-                .formParam("district", "")
-                .formParam("starRating", "")
-                .formParam("type", "")
-                .formParam("pageSize", "10")
-                .formParam("currentPage", "1")
-                .formParam("count", "0")
-                .formParam("loading", "true")
-                .formParam("status", "1")
-                .formParam("beginDate", "2020-06-23")
-                .formParam("endDate", "2020-06-24")
-                .formParam("city", "")
-                .formParam("userInCity", "")
-                .formParam("lnt", "")
-                .formParam("lat", "")
-                .request(Method.POST, "/web/hotel/queryPage")
+                .formParam("memberId", "")
+                .formParam("hotelId", "")
+                .formParam("stayNight", "")
+                .formParam("beginDate", "")
+                .formParam("endDate", "")
+                .request(Method.POST, "")
                 .then()
-                .body("resultCode", equalTo(8200));
+                .body("resultCode", equalTo(" "));
     }
 
-    //酒店日态详情为空
+ */
+    /*
+    //酒店详情-传入正确的酒店id
+    @Test(testName = "酒店", description = "酒店详情-传入正确的酒店id")
+    public void hotel_queryById() {
+        baseURI = suit.getBaseurl();
+        given()
+                .formParam("tenantId", "")
+                .formParam("memberId", "")
+                .formParam("hotelId", "")
+                .formParam("stayNight", "")
+                .formParam("beginDate", "")
+                .formParam("endDate", "")
+                .request(Method.POST, "")
+                .then()
+                .body("resultCode", equalTo(8500));
+    }
+     */
+
+    //酒店日态详情-房型id为空
     @Test(testName = "酒店", description = "酒店日态详情为空")
     public void queryBatchBySkuId_null() {
-        baseURI = "https://lmyxtest-web.limachufa.com";
+        baseURI = suit.getBaseurl();
         given()
                 .formParam("tenantId", "")
                 .formParam("beginDate", "")
@@ -621,10 +598,10 @@ public class limayouxuanCase {
                 .body("resultCode", equalTo(8500));
     }
 
-    //酒店日态详情传入id
-    @Test(testName = "酒店", description = "酒店日态详情传入id")
+    //酒店日态详情传入skuid
+    @Test(testName = "酒店", description = "酒店日态详情传入skuid")
     public void queryBatchBySkuId() {
-        baseURI = "https://lmyxtest-web.limachufa.com";
+        baseURI = suit.getBaseurl();
         given()
                 .formParam("tenantId", "519142041838419968")
                 .formParam("beginDate", "2020-06-23")
@@ -638,7 +615,7 @@ public class limayouxuanCase {
     //酒店日态详情传入id
     @Test(testName = "酒店", description = "酒店日态详情传入随意id")
     public void queryBatchBySkuId_errors() {
-        baseURI = "https://lmyxtest-web.limachufa.com";
+        baseURI = suit.getBaseurl();
         given()
                 .formParam("tenantId", "5191420418384199681")
                 .formParam("beginDate", "2020-06-23")
@@ -653,7 +630,7 @@ public class limayouxuanCase {
     //分页查询攻略-tenantId为空
     @Test(testName = "攻略", description = "分页查询攻略-tenantId为空")
     public void strategy_null() {
-        baseURI = "https://lmyxtest-web.limachufa.com";
+        baseURI = suit.getBaseurl();
         given()
                 .formParam("tenantId", "")
                 .formParam("pageSize", "10")
@@ -673,7 +650,7 @@ public class limayouxuanCase {
     //分页查询攻略-列表查询成功
     @Test(testName = "攻略", description = "分页查询攻略-官方攻略列表查询成功")
     public void strategy() {
-        baseURI = "https://lmyxtest-web.limachufa.com";
+        baseURI = suit.getBaseurl();
         given()
                 .formParam("tenantId", "519142041838419968")
                 .formParam("pageSize", "10")
@@ -692,7 +669,7 @@ public class limayouxuanCase {
     //分页查询攻略-列表显示15条数据
     @Test(testName = "攻略", description = "分页查询攻略-列表显示15条数据")
     public void strategy_ten() {
-        baseURI = "https://lmyxtest-web.limachufa.com";
+        baseURI = suit.getBaseurl();
         given()
                 .formParam("tenantId", "519142041838419968")
                 .formParam("pageSize", "15")
@@ -712,7 +689,7 @@ public class limayouxuanCase {
     //缴费记录为空
     @Test(testName = "力马快充", description = "力马快充，缴费记录为空")
     public void MemberOrderPage_null() {
-        baseURI = "https://lmyxtest-web.limachufa.com";
+        baseURI = suit.getBaseurl();
         given()
                 /*
                 .formParam("tenantId", "519142041838419968")
@@ -731,7 +708,7 @@ public class limayouxuanCase {
     //缴费记录显示1条
     @Test(testName = "力马快充", description = "力马快充，缴费记录1条数据")
     public void MemberOrderPage_one() {
-        baseURI = "https://lmyxtest-web.limachufa.com";
+        baseURI = suit.getBaseurl();
         given()
                 .formParam("tenantId", "519142041838419968")
                 .formParam("pageSize", "1")
@@ -748,7 +725,7 @@ public class limayouxuanCase {
     //缴费记录显示10条
     @Test(testName = "力马快充", description = "力马快充，缴费记录10条数据")
     public void MemberOrderPage_ten() {
-        baseURI = "https://lmyxtest-web.limachufa.com";
+        baseURI = suit.getBaseurl();
         given()
                 .formParam("tenantId", "519142041838419968")
                 .formParam("pageSize", "10")
@@ -765,7 +742,7 @@ public class limayouxuanCase {
     //缴费记录-错误id
     @Test(testName = "力马快充", description = "力马快充，缴费记录输入错误的menberid")
     public void MemberOrderPage_error() {
-        baseURI = "https://lmyxtest-web.limachufa.com";
+        baseURI = suit.getBaseurl();
         given()
                 .formParam("tenantId", "519142041838419968")
                 .formParam("pageSize", "10")
@@ -783,7 +760,7 @@ public class limayouxuanCase {
     //缴费记录-订单详情页-订单为空
     @Test(testName = "力马快充", description = "力马快充，订单号为空")
     public void OrderCode_null() {
-        baseURI = "https://lmyxtest-web.limachufa.com";
+        baseURI = suit.getBaseurl();
         given()
                 .formParam("orderCode", "")
                 .request(Method.POST, "/web/serveOrder/queryDetailByOrderCode")
@@ -795,7 +772,7 @@ public class limayouxuanCase {
     //缴费记录-订单详情页-输入错误的订单号
     @Test(testName = "力马快充", description = "力马快充，错误订单号")
     public void OrderCode_error() {
-        baseURI = "https://lmyxtest-web.limachufa.com";
+        baseURI = suit.getBaseurl();
         given()
                 .formParam("orderCode", "1234567890")
                 .request(Method.POST, "/web/serveOrder/queryDetailByOrderCode")
@@ -807,7 +784,7 @@ public class limayouxuanCase {
     //缴费记录-订单详情页-正确的订单编号
     @Test(testName = "力马快充", description = "力马快充，正确订单编号")
     public void OrderCode() {
-        baseURI = "https://lmyxtest-web.limachufa.com";
+        baseURI = suit.getBaseurl();
         given()
                 .formParam("orderCode", "SDM703919762966577153")
                 .request(Method.POST, "/web/serveOrder/queryDetailByOrderCode")
@@ -819,7 +796,7 @@ public class limayouxuanCase {
     //话费-直接充值
     @Test(testName = "力马快充", description = "力马快充，话费直接充值")
     public void mobileOrder_null() {
-        baseURI = "https://lmyxtest-web.limachufa.com";
+        baseURI = suit.getBaseurl();
         given()
                 .formParam("tenantId", "")
                 .formParam("memberId", " ")
@@ -834,7 +811,7 @@ public class limayouxuanCase {
     //话费-输入手机号充值，充值10元
     @Test(testName = "力马快充", description = "力马快充，输入手机号充值，充值10元")
     public void mobileOrder_tenyaun() {
-        baseURI = "https://lmyxtest-web.limachufa.com";
+        baseURI = suit.getBaseurl();
         given()
                 .formParam("tenantId", "519142041838419968")
                 .formParam("memberId", "725081578018963456")
@@ -849,7 +826,7 @@ public class limayouxuanCase {
     //话费-输入手机号充值，充值100元
     @Test(testName = "力马快充", description = "力马快充，输入手机号充值，充值100元")
     public void mobileOrder_100yuan() {
-        baseURI = "https://lmyxtest-web.limachufa.com";
+        baseURI = suit.getBaseurl();
         given()
                 .formParam("tenantId", "519142041838419968")
                 .formParam("memberId", "725081578018963456")
@@ -863,7 +840,7 @@ public class limayouxuanCase {
     //话费-输入手机号充值，充值500元
     @Test(testName = "力马快充", description = "力马快充，输入手机号充值，充值500元")
     public void mobileOrder_500yuan() {
-        baseURI = "https://lmyxtest-web.limachufa.com";
+        baseURI = suit.getBaseurl();
         given()
                 .formParam("tenantId", "519142041838419968")
                 .formParam("memberId", "725081578018963456")
@@ -877,7 +854,7 @@ public class limayouxuanCase {
     //话费-输入手机号充值，充值1000元
     @Test(testName = "力马快充", description = "力马快充，输入手机号充值，充值1000元")
     public void mobileOrder_1000yuan() {
-        baseURI = "https://lmyxtest-web.limachufa.com";
+        baseURI = suit.getBaseurl();
         given()
                 .formParam("tenantId", "519142041838419968")
                 .formParam("memberId", "725081578018963456")
@@ -894,7 +871,7 @@ public class limayouxuanCase {
     //火车票预订，购买当前过去的日期
     @Test(testName = "火车票", description = "火车票，购买当前过去的日期")
     public void TrainTickets_after() {
-        baseURI = "https://lmyxtest-web.limachufa.com";
+        baseURI = suit.getBaseurl();
         given()
                 .formParam("bookers", "[{\"ticketType\": 1,\"bookerName\": \"王云\",\"idcardType\": 0,\"idcardNo\": \"420621199503270621\",\"bookerPhone\": \"18727083743\",\"seatType\": 0}]")
                 .formParam("contactName", "云")
@@ -921,7 +898,7 @@ public class limayouxuanCase {
     //火车票预订，购票人信息为空时下单
     @Test(testName = "火车票", description = "火车票，购票人信息为空下单")
     public void TrainTickets_null() {
-        baseURI = "https://lmyxtest-web.limachufa.com";
+        baseURI = suit.getBaseurl();
         given()
                 .formParam("bookers", "")
                 .formParam("contactName", "")
@@ -944,39 +921,12 @@ public class limayouxuanCase {
                 .body("message", equalTo("请求参数不能为空"));
 
     }
-    /*
-    //火车票预订，购买一个成人票和一个儿童票
-    @Test(testName ="火车票" ,description = "火车票购买一个成人票和一个儿童票")
-    public void TrainTickets_child() {
-        baseURI = "https://lmyxtest-web.limachufa.com";
-        given()
-                .formParam("bookers", "[{\"ticketType\": 1,\"bookerName\": \"王云\",\"idcardType\": 0,\"idcardNo\": \"420621199503270621\",\"bookerPhone\": \"18727083743\",\"seatType\": 0},{\"ticketType\": 2,\"bookerName\": \"王云\",\"idcardType\": 0,\"idcardNo\": \"420621199503270621\",\"bookerPhone\": \"18727083743\",\"seatType\": 0}]")
-                .formParam("contactName", "王云")
-                .formParam("contactTel", "18727083743")
-                .formParam("date", "2020-07-22")
-                .formParam("endTime", "07:20")
-                .formParam("from", "太原")
-                .formParam("memberId", "712708494783938560")
-                .formParam("runTimeDays", "0")
-                .formParam("runTimeHour", "0")
-                .formParam("runTimeMinutes", "11")
-                .formParam("startTime", "07:09")
-                .formParam("tenantId", "519142041838419968")
-                .formParam("to", "太原南")
-                .formParam("trainNumber", "4611")
-                .request(Method.POST, "/web/trainlineOrder/bookTrainTickets")
-                .then()
-                //断言resultCode=7115
-                //.body("resultCode",equalTo("7115"));
-                .body("message",equalTo("出票失败"));
 
-    }
-     */
 
     //火车票预订，单独购买一张儿童票
     @Test(testName = "火车票", description = "火车票，单独购买一张儿童票")
     public void TrainTickets_child() {
-        baseURI = "https://lmyxtest-web.limachufa.com";
+        baseURI = suit.getBaseurl();
         given()
                 .formParam("bookers", "[{\"bookerName\":\"王云\",\"idcardType\":0,\"idcardNo\":\"420621199503270621\",\"bookerPhone\":\"18727083743\",\"ticketType\":2,\"typeName\":\"成人票\",\"isNameError\":false,\"isIDError\":false,\"isPhoneError\":false,\"seatType\":\"5\"}]")
                 .formParam("contactName", "云")
@@ -1001,4 +951,185 @@ public class limayouxuanCase {
 
 
     }
+    //智能导览
+    @Test(testName = "智能导览", description = "智能导览")
+    public void getAround() {
+        baseURI = suit.getBaseurl();
+        given()
+                .formParam("tenantId", "111")
+                .formParam("type", "111")
+                .formParam("id", "11")
+                .formParam("pageSize", "1")
+                .formParam("currentPage", "1")
+                .formParam("count", "1")
+                .formParam("loading", "1")
+                .request(Method.POST, "/web/selfcenter/myCollectionList")
+                .then()
+                .body("list",hasSize(0))
+                .body("resultCode", equalTo(8200));
+    }
+    //收藏~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    //收藏列表为空
+    @Test(testName = "收藏", description = "收藏列表为空")
+    public void myCollectionlist_null() {
+        baseURI = suit.getBaseurl();
+        given()
+                .formParam("tenantId", "111")
+                .formParam("type", "111")
+                .formParam("id", "11")
+                .formParam("pageSize", "1")
+                .formParam("currentPage", "1")
+                .formParam("count", "1")
+                .formParam("loading", "1")
+                .request(Method.POST, "/web/selfcenter/myCollectionList")
+                .then()
+                .body("list",hasSize(0))
+                .body("resultCode", equalTo(8200));
+    }
+    //不传入id收藏
+    @Test(testName = "收藏", description = "收藏_不传入id收藏")
+    public void Collection_id() {
+        baseURI = suit.getBaseurl();
+        given()
+                .formParam("tenantId", "519142041838419968")
+                .formParam("id", "")
+                .formParam("contentId", "")
+                .formParam("type", "2")
+                .request(Method.POST, "/web/selfcenter/collect")
+                .then()
+                .body("message", equalTo("微信会员未授权"));
+    }
+    //收藏
+    @Test(testName = "收藏", description = "收藏")
+    public void Collection() {
+        baseURI = suit.getBaseurl();
+        given()
+                .formParam("tenantId", "519142041838419968")
+                .formParam("id", "Collectionid")
+                .formParam("contentId", "")
+                .formParam("type", "2")
+                .request(Method.POST, "/web/selfcenter/collect")
+                .then()
+                .body("message", equalTo("成功"));
+
+    }
+    //收藏列表
+    @Test(testName = "收藏", description = "收藏列表" ,dependsOnMethods = "Collection")
+    public void myCollectionlist() {
+        baseURI = suit.getBaseurl();
+        given()
+                .formParam("tenantId", "519142041838419968")
+                .formParam("type", "2")
+                .formParam("id", "Collectionid")
+                .formParam("pageSize", "10")
+                .formParam("currentPage", "2")
+                .formParam("count", "0")
+                .formParam("loading", "true")
+                .request(Method.POST, "/web/selfcenter/myCollectionList")
+                .then()
+                .body("message", equalTo(""));
+    }
+
+    //取消收藏
+    @Test(testName = "取消收藏", description = "取消收藏")
+    public void canceCollection() {
+        baseURI = suit.getBaseurl();
+        given()
+                .formParam("tenantId", "519142041838419968")
+                .formParam("id", "Collectionid")
+                .formParam("contentId", "692326891465474048")
+                .formParam("type", "2")
+                .request(Method.POST, "/web/selfcenter/cancelCollect")
+                .then()
+                .body("message", equalTo("成功"));
+    }
+    //取消收藏列表
+    @Test(testName = "收藏", description = "收藏列表" ,dependsOnMethods = "canceCollection")
+    public void cancemyCollectionlist() {
+        baseURI = suit.getBaseurl();
+        given()
+                .formParam("tenantId", "519142041838419968")
+                .formParam("type", "2")
+                .formParam("id", "Collectionid")
+                .formParam("pageSize", "10")
+                .formParam("currentPage", "2")
+                .formParam("count", "0")
+                .formParam("loading", "true")
+                .request(Method.POST, "/web/selfcenter/myCollectionList")
+                .then()
+                .body("message", equalTo(""));
+
+    }
+
+    @Test(testName = "", description = "")
+    public void Collection1() {
+        try {
+            String tem = "";
+            TestCase testCase = caseList.get(0);
+
+            ResultSet resultSet = JdbcUtils.getResult(testCase.getDBsql().getSqlList().get(1), testCase.getDBsql().getJdbc());
+            baseURI = suit.getBaseurl();
+            Response response =
+                    given()
+                            .formParam("tenantId", "519142041838419968")
+                            .formParam("id", "Collectionid")
+                            .formParam("contentId", "")
+                            .formParam("type", "2")
+                            .request(Method.POST, "/web/selfcenter/collect")
+                            .then()
+                            .body("message", equalTo("成功"))
+                            .extract()
+                            .response();
+
+        } finally {
+            JdbcUtils.closeConn();
+        }
+        Response response1 =
+                given()
+                        .formParam("tenantId", "519142041838419968")
+                        .formParam("type", "2")
+                        .formParam("id", "Collectionid")
+                        .formParam("pageSize", "10")
+                        .formParam("currentPage", "2")
+                        .formParam("count", "0")
+                        .formParam("loading", "true")
+                        .request(Method.POST, "/web/selfcenter/myCollectionList")
+                        .then()
+                        .body("message", equalTo(""))
+                        .extract()
+                        .response();
+        Response response2 =
+                given()
+                        .formParam("tenantId", "519142041838419968")
+                        .formParam("id", "Collectionid")
+                        .formParam("contentId", "692326891465474048")
+                        .formParam("type", "2")
+                        .request(Method.POST, "/web/selfcenter/cancelCollect")
+                        .then()
+                        .body("message", equalTo("成功"))
+                        .extract()
+                        .response();
+        Response response3 =
+                given()
+                        .formParam("tenantId", "519142041838419968")
+                        .formParam("type", "2")
+                        .formParam("id", "Collectionid")
+                        .formParam("pageSize", "10")
+                        .formParam("currentPage", "2")
+                        .formParam("count", "0")
+                        .formParam("loading", "true")
+                        .request(Method.POST, "/web/selfcenter/myCollectionList")
+                        .then()
+                        .body("message", equalTo(""))
+                        .extract()
+                        .response();
+    }
+
+
+    @AfterClass
+    public void clean(){
+        JdbcUtils.closeConn();
+    }
+
+
 }
