@@ -969,6 +969,7 @@ public class limayouxuanCase {
                 .body("resultCode", equalTo(8200));
     }
     //收藏~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    /*
     //收藏列表为空
     @Test(testName = "收藏", description = "收藏列表为空")
     public void myCollectionlist_null() {
@@ -1060,7 +1061,7 @@ public class limayouxuanCase {
                 .body("message", equalTo(""));
 
     }
-
+     */
     @Test(testName = "", description = "")
     public void Collection1() {
         try {
@@ -1082,7 +1083,6 @@ public class limayouxuanCase {
                             .response();
 
         } finally {
-            JdbcUtils.closeConn();
         }
         Response response1 =
                 given()
@@ -1126,10 +1126,32 @@ public class limayouxuanCase {
     }
 
 
+    //意见反馈~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    //意见反馈
+    @Test(testName = "意见反馈", description = "意见反馈投诉管理列表查询成功" )
+    public void suggestions() {
+        baseURI = suit.getBaseurl();
+        given()
+                .formParam("tenantId", "519142041838419968")
+                .formParam("memberId", "727945672514338816")
+                .formParam("pageSize", "10")
+                .formParam("currentPage", "1")
+                .formParam("count", "0")
+                .formParam("loading", "true")
+                .formParam("finished","false")
+                .request(Method.POST, "/web/complaint/queryByConditions")
+                .then()
+                .body("message", equalTo("投诉管理列表查询成功"));
+
+    }
+
+
     @AfterClass
     public void clean(){
         JdbcUtils.closeConn();
     }
+
+
 
 
 }
