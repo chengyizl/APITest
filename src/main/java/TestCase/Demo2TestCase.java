@@ -19,6 +19,7 @@ import static io.restassured.RestAssured.*;
 
 import org.testng.Assert;
 import org.testng.ITestContext;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
@@ -108,8 +109,6 @@ public class Demo2TestCase {
             Assert.assertEquals("刘成成", tem);
         }catch (Exception e){
             e.printStackTrace();
-        }finally {
-            JdbcUtils.closeConn();
         }
     }
 
@@ -243,6 +242,11 @@ public class Demo2TestCase {
         //删除set中随机多个元素
         jedis.spop("user",jedis.scard("user"));
 
+    }
+
+    @AfterClass
+    public void clean(){
+        JdbcUtils.closeConn();
     }
 
 }

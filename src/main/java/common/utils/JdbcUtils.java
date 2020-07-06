@@ -1,6 +1,7 @@
 package common.utils;
 
 
+import lombok.Data;
 import pojo.TestJDBC;
 
 import java.sql.*;
@@ -16,7 +17,7 @@ public class JdbcUtils {
     private static void setConnection(TestJDBC jdbc) {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            logger.info("数据库驱动加载成功");
+            logger.debug("数据库驱动加载成功");
         } catch(ClassNotFoundException e){
             logger.error("数据库驱动加载失败");
             e.printStackTrace();
@@ -24,7 +25,7 @@ public class JdbcUtils {
         try {
             con = DriverManager.getConnection(jdbc.getUrl(),jdbc.getUsername(),jdbc.getPassword());
             if(!con.isClosed()) {
-                logger.info("数据库连接成功");
+                logger.debug("数据库连接成功");
             }
         } catch (SQLException e) {
             logger.error("数据库连接失败");
@@ -34,13 +35,13 @@ public class JdbcUtils {
 
     private static Statement setStatement(TestJDBC jdbc){
         try {
-            if(con==null){
+            if(con==null||con.isClosed()){
                 setConnection(jdbc);
             }
             statement = con.createStatement();
-            logger.info("数据库statement对象获取成功");
+            logger.debug("数据库statement对象获取成功");
         }catch (SQLException e){
-            logger.info("数据库statement对象获取失败");
+            logger.error("数据库statement对象获取失败");
             e.printStackTrace();
         }
         return statement;
@@ -50,11 +51,11 @@ public class JdbcUtils {
         ResultSet resultSet =null;
         try {
             //ResultSet类，用来存放获取的结果集！！
-            if(statement==null){
+            if(statement==null||statement.isClosed()){
                 setStatement(jdbc);
             }
-            statement.executeUpdate(sql);
-            logger.info("数据库操作语句执行成功");
+            statement.execute(sql);
+            logger.debug("数据库操作语句执行成功");
         }catch (SQLException e){
             e.printStackTrace();
             logger.error("数据库操作语句执行失败");
@@ -65,10 +66,25 @@ public class JdbcUtils {
 
     public static void closeConn(){
         try {
-            con.close();
-            logger.error("数据库连接关闭成功");
+            closeStatement();
+            if(con!=null&&!con.isClosed()) {
+                con.close();
+                logger.debug("数据库连接关闭成功");
+            }
         }catch (SQLException e){
             logger.error("数据库连接关闭失败");
+            e.printStackTrace();
+        }
+    }
+
+    private static void closeStatement(){
+        try {
+            if (statement != null && !statement.isClosed()) {
+                statement.close();
+                logger.debug("statement 关闭成功");
+            }
+        }catch (SQLException e){
+            logger.error("statement 关闭失败");
             e.printStackTrace();
         }
     }
