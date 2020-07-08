@@ -1,5 +1,8 @@
 {
   "baseurl": "http://47.111.8.172:9278",
+  "params": {
+    "params1":"value"
+  },
   "caseList": [
     {
       "id": "jkasjdlf",
