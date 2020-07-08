@@ -55,7 +55,11 @@ public class JdbcUtils {
                 setStatement(jdbc);
             }
             statement.execute(sql);
+
             logger.debug("数据库操作语句执行成功");
+
+            logger.info("数据库操作语句执行成功");
+
         }catch (SQLException e){
             e.printStackTrace();
             logger.error("数据库操作语句执行失败");
