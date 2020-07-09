@@ -1,6 +1,7 @@
 package TestCase;
 
 
+import common.utils.DateUtils;
 import common.utils.IOUtils;
 import common.utils.JdbcUtils;
 import common.utils.JsonUtils;
@@ -19,6 +20,7 @@ import static io.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.equalTo;
 
 
+import io.restassured.specification.RequestSpecification;
 import org.testng.Assert;
 import org.testng.ITestContext;
 import org.testng.annotations.*;
@@ -844,12 +846,12 @@ public class limayouxuanCase {
     public void TrainTickets() {
         baseURI = suit.getBaseurl();
         given()
-                .header("Content-Type","application/x-www-form-urlencoded")
+                .header("Content-Type","application/x-www-form-urlencoded;charset=UTF-8")
                 .formParam("bookers", "[{\"ticketType\": 1,\"bookerName\": \"王云\",\"idcardType\": 0,\"idcardNo\": \"420621199503270621\",\"bookerPhone\": \"18727083743\",\"seatType\": 0}]")
-                .formParam("contactName", "云云")
+                .formParam("contactName", "王云")
                 .formParam("contactTel", "18727083743")
-                .formParam("date", "2020-07-30")
-                .formParam("endTime", "19:31")
+                .formParam("date", DateUtils.dateToStr(DateUtils.rollDay(DateUtils.getNow(),2),"yyyy-MM-dd"))
+                .formParam("endTime", DateUtils.dateToStr(DateUtils.rollMinute(DateUtils.getNow(),90),"hh:mm"))
                 .formParam("from", "杭州东")
                 .formParam("memberId", "712708494783938560")
                 .formParam("runTimeDays", "0")
