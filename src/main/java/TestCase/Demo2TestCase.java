@@ -36,9 +36,8 @@ import java.util.*;
 public class Demo2TestCase {
 
     TestSuit suit;
-
-    List<Cookie> cookies;
     ArrayList<TestCase> caseList;
+    Map<String,Object> params;
 
     @BeforeTest
     public void preConditions() {
@@ -46,6 +45,8 @@ public class Demo2TestCase {
         String jsondata = IOUtils.readFiletoString(path,"utf-8");
         suit = JsonUtils.parseJsonData(jsondata,TestSuit.class);
         caseList = suit.getCaseList();
+        params = suit.getParams();
+        System.out.println((String) params.get("params1"));
     }
 
 //    @Test(dataProvider = "dataFromJson",dataProviderClass = DataProviders.class)
