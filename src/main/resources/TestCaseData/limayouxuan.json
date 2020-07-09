@@ -1,5 +1,8 @@
 {
   "baseurl": "https://lmyxtest-web.limachufa.com",
+  "params": {
+    "params1":"value"
+  },
   "caseList": [
     {
       "id": "jkasjdlf",

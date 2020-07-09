@@ -23,6 +23,7 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
+import pojo.JsonData;
 import pojo.TestCase;
 import pojo.TestSuit;
 import redis.clients.jedis.Jedis;
@@ -152,9 +153,9 @@ public class Demo2TestCase {
     }*/
 
     @Story("mock数据进行多次测试")
-    @Test(description = "通过mock数据进行多次测试时",dataProviderClass = DataProviders.class,dataProvider = "dataFromArray")
+    @Test(description = "通过mock数据进行多次测试时",dataProviderClass = DataProviders.class,dataProvider = "Collection2")
     public void testCase5(Object object){
-        Assert.assertNotNull(object);
+        Assert.assertNotNull(((JsonData)object).getDes());
     }
 
 

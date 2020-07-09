@@ -24,6 +24,8 @@ import io.restassured.specification.RequestSpecification;
 import org.testng.Assert;
 import org.testng.ITestContext;
 import org.testng.annotations.*;
+import pojo.JsonData;
+import pojo.LimaTrainline;
 import pojo.TestCase;
 import pojo.TestSuit;
 import redis.clients.jedis.Jedis;
@@ -31,6 +33,7 @@ import redis.clients.jedis.Jedis;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Epic("一级标题")
 @Feature("二级标题")
@@ -52,6 +55,7 @@ public class limayouxuanCase {
 
     List<Cookie> cookies;
     ArrayList<TestCase> caseList;
+    Map<String,Object> params;
 
     @BeforeClass
     public void preConditions() {
@@ -839,9 +843,52 @@ public class limayouxuanCase {
                 .body("message", equalTo(""));
     }
 
+    //加油卡，列表为空
+    @Test(testName = "加油卡列表为空", description = "力马快充，加油卡列表为空")
+    public void getGasList_null() {
+        baseURI = suit.getBaseurl();
+        given()
+                .formParam("tenantId", "")
+                .formParam("type", "")
+                .request(Method.POST, "/web/serveOrder/getGasList")
+                .then()
+                .body("message", equalTo("加油卡类型不能为空"))
+                .body("resultCode", equalTo(8500));
+
+    }
+    //加油卡，列表正常显示
+    @Test(testName = "加油卡列表正常显示", description = "力马快充，加油卡列表正常显示")
+    public void getGasList() {
+        baseURI = suit.getBaseurl();
+        given()
+                .formParam("tenantId", "519142041838419968")
+                .formParam("type", "2")
+                .request(Method.POST, "/web/serveOrder/getGasList")
+                .then()
+                .body("message", equalTo("查询加油卡类标准商品列表查询成功"))
+                .body("resultCode", equalTo(8200));
+
+    }
+    //加油卡订单接口，列表为空时立即充值
+    @Test(testName = "加油卡列表正常显示", description = "力马快充，加油卡列表正常显示")
+    public void gasCardOrder_null() {
+        baseURI = suit.getBaseurl();
+        given()
+                .formParam("tenantId", "519142041838419968")
+                .formParam("type", "2")
+                .request(Method.POST, "/web/serveOrder/getGasList")
+                .then()
+                .body("message", equalTo("查询加油卡类标准商品列表查询成功"))
+                .body("resultCode", equalTo(8200));
+
+    }
+
+
     //火车票~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     /*
     //火车票预订，正常下单
+           //.formParam("date", DateUtils.dateToStr(DateUtils.rollDay(DateUtils.getNow(),2),"yyyy-MM-dd"))
+            //.formParam("endTime", DateUtils.dateToStr(DateUtils.rollMinute(DateUtils.getNow(),90),"hh:mm"))
     @Test(testName = "火车票正常占座成功", description = "火车票正常占座成功")
     public void TrainTickets() {
         baseURI = suit.getBaseurl();
@@ -851,7 +898,7 @@ public class limayouxuanCase {
                 .formParam("contactName", "王云")
                 .formParam("contactTel", "18727083743")
                 .formParam("date", DateUtils.dateToStr(DateUtils.rollDay(DateUtils.getNow(),2),"yyyy-MM-dd"))
-                .formParam("endTime", DateUtils.dateToStr(DateUtils.rollMinute(DateUtils.getNow(),90),"hh:mm"))
+                .formParam("endTime", "19:31")
                 .formParam("from", "杭州东")
                 .formParam("memberId", "712708494783938560")
                 .formParam("runTimeDays", "0")
@@ -868,7 +915,37 @@ public class limayouxuanCase {
                 .body("message", equalTo("成功"));
 
     }
+
      */
+
+    /*
+    @Test(testName = "火车票预订多张票", description = "火车票预订多张票",dataProviderClass = DataProviders.class,dataProvider = "LimaTrainline")
+    public void TrainTickets1(Object object) {
+        baseURI = suit.getBaseurl();
+        RequestSpecification requestSpecification = given()
+                .header("Content-Type","application/x-www-form-urlencoded;charset=UTF-8")
+                .formParam("bookers", ((LimaTrainline)object).getBookers())
+                .formParam("contactName", ((LimaTrainline)object).getContactName())
+                .formParam("contactTel", ((LimaTrainline)object).getContactTel())
+                .formParam("date", ((LimaTrainline)object).getDate())
+                .formParam("endTime", ((LimaTrainline)object).getEndTime())
+                .formParam("from", ((LimaTrainline)object).getFrom())
+                .formParam("memberId", ((LimaTrainline)object).getMemberId())
+                .formParam("runTimeDays",((LimaTrainline)object).getRunTimeDays())
+                .formParam("runTimeHour", ((LimaTrainline)object).getRunTimeHour())
+                .formParam("runTimeMinutes", ((LimaTrainline)object).getRunTimeMinutes())
+                .formParam("startTime",((LimaTrainline)object).getStartTime() )
+                .formParam("tenantId",((LimaTrainline)object).getTenantId() )
+                .formParam("to", ((LimaTrainline)object).getTo())
+                .formParam("trainNumber", ((LimaTrainline)object).getTrainNumber());
+        requestSpecification
+                .request(Method.POST, "/web/trainlineOrder/bookTrainTickets")
+                .then()
+                .body("message", equalTo("成功"));
+
+    }
+     */
+
     //火车票预订，购买当前过去的日期
     @Test(testName = "火车票，购买当前过去的日期", description = "火车票，购买当前过去的日期")
     public void TrainTickets_after() {
@@ -971,7 +1048,7 @@ public class limayouxuanCase {
     }
     //收藏~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     //收藏列表为空
-    @Test(testName = "收藏", description = "收藏列表为空")
+    @Test(testName = "收藏列表为空", description = "收藏列表为空")
     public void myCollectionlist_null() {
         baseURI = suit.getBaseurl();
         given()
@@ -988,7 +1065,7 @@ public class limayouxuanCase {
                 .body("resultCode", equalTo(8200));
     }
     //不传入id收藏
-    @Test(testName = "收藏", description = "收藏_不传入id收藏")
+    @Test(testName = "收藏_不传入id收藏", description = "收藏_不传入id收藏")
     public void Collection_id() {
         baseURI = suit.getBaseurl();
         given()
