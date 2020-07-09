@@ -837,8 +837,8 @@ public class limayouxuanCase {
                 .body("message", equalTo(""));
     }
 
-
     //火车票~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    /*
     //火车票预订，正常下单
     @Test(testName = "火车票正常占座成功", description = "火车票正常占座成功")
     public void TrainTickets() {
@@ -866,6 +866,7 @@ public class limayouxuanCase {
                 .body("message", equalTo("成功"));
 
     }
+     */
     //火车票预订，购买当前过去的日期
     @Test(testName = "火车票，购买当前过去的日期", description = "火车票，购买当前过去的日期")
     public void TrainTickets_after() {
@@ -967,7 +968,6 @@ public class limayouxuanCase {
                 .body("resultCode", equalTo(8200));
     }
     //收藏~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
     //收藏列表为空
     @Test(testName = "收藏", description = "收藏列表为空")
     public void myCollectionlist_null() {
