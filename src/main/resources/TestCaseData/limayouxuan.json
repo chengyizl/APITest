@@ -21,7 +21,16 @@
           "delete from ots_lima_test.member_info where phone = '18727083743';",
           "INSERT INTO member_collect ( id, content_id, member_id, is_deleted, create_time, is_visible, content_type )\nVALUES\n\t(\n\t\t99,\n\t\t1,\n\t\t727945672514338816,\n\t\t1,\n\t\tNOW(),\n\t\t1,\n\t2)",
           "delete from ots_lima_test.member_collect where  id= 99",
-          "delete from ots_lima_test.complaints_suggestions_info where  id= 735525580992151552"
+          "delete from ots_lima_test.complaints_suggestions_info where  id= 735525580992151552",
+          "INSERT INTO specialty_product_info ( id, product_name, product_code, is_selling, cancel_rule, is_visible, is_deleted )\nVALUES\n\t(123456789,'插入特产',727,1,1,1,0)",
+          "INSERT INTO specialty_sku_stock_price_info ( id, product_id,sku_name, sku_code, sale_price, stock, is_open, creator_id,create_time,is_visible, is_deleted)\nVALUES\n\t(1,123456789,'规格1',111,0.01,10,1,123,NOW(),1,0)",
+          "INSERT INTO specialty_photo_info ( id, product_id, image_url, is_deleted, creator_id, create_time, modified_id, modified_time, is_visible )\nVALUES\n\t(1,123456789,'/ 202007 / 14 / bc4223da - 8e40-4f6d - a037 - 4a3b5e12412d.jpg',0,1,NOW(),1,NOW(),1)",
+          "DELETE FROM specialty_product_info WHERE id = '123456789'",
+          "DELETE from specialty_sku_stock_price_info WHERE product_id = '123456789'",
+          "DELETE FROM specialty_photo_info WHERE product_id = '123456789'",
+          "SELECT * FROM specialty_product_info  WHERE product_name = '插入特产'",
+          "INSERT INTO specialty_detail_info(id,product_id,transport_type_code,province_code,city_code,introduce,purchase_notice,is_deleted,creator_id,create_time,modified_id,modified_time,is_visible)\n\tVALUES\n\t(1,123456789,'default_transport',110000000000,110100000000,'产品介绍','购买须知',0,1,NOW(),1,NOW(),1)"
+
 
         ]
       }

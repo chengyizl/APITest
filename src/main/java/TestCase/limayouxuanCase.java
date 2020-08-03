@@ -131,7 +131,7 @@ public class limayouxuanCase {
         try {
             String tem = "";
             TestCase testCase = caseList.get(0);
-
+            //删除用户电话=18727083743的
             ResultSet resultSet = JdbcUtils.getResult(testCase.getDBsql().getSqlList().get(0), testCase.getDBsql().getJdbc());
             baseURI = suit.getBaseurl();
 
@@ -238,7 +238,7 @@ public class limayouxuanCase {
                 .body("resultCode", equalTo(8500));
     }
 
-    //广告位输入正确的tenantId
+    //广告位输入正确的tenantId（areaNumbers=特产  值=specialty）
     @Test(testName = "广告位-输入正确的tenantId", description = "广告位-输入正确的tenantId")
     public void adsense() {
         baseURI = suit.getBaseurl();
@@ -610,8 +610,8 @@ public class limayouxuanCase {
                 .body("resultCode", equalTo(8200));
 
     }
-    //酒店列表显示11条数据
-    @Test(testName = "酒店列表传入过去日期", description = "酒店列表显示11条数据")
+    //酒店列表传入过去日期
+    @Test(testName = "酒店列表传入过去日期", description = "酒店列表传入过去日期")
     public void hotel_errordate() {
         baseURI = suit.getBaseurl();
         given()
@@ -685,7 +685,7 @@ public class limayouxuanCase {
     }
 
     //酒店日态详情-房型id为空
-    @Test(testName = "酒店日态详情为空", description = "酒店日态详情为空")
+    @Test(testName = "酒店日态详情-房型id为空", description = "酒店日态详情-房型id为空")
     public void queryBatchBySkuId_null() {
         baseURI = suit.getBaseurl();
         given()
@@ -728,7 +728,7 @@ public class limayouxuanCase {
 
     //攻略~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     //分页查询攻略-tenantId为空
-    @Test(testName = "攻略，tenantId为空", description = "分页查询攻略-tenantId为空")
+    @Test(testName = "分页查询攻略-tenantId为空", description = "分页查询攻略-tenantId为空")
     public void strategy_null() {
         baseURI = suit.getBaseurl();
         given()
@@ -748,7 +748,7 @@ public class limayouxuanCase {
     }
 
     //分页查询攻略-列表查询成功
-    @Test(testName = "攻略，官方攻略列表查询成功", description = "分页查询攻略-官方攻略列表查询成功")
+    @Test(testName = "分页查询攻略-官方攻略列表查询成功", description = "分页查询攻略-官方攻略列表查询成功")
     public void strategy() {
         baseURI = suit.getBaseurl();
         given()
@@ -767,7 +767,7 @@ public class limayouxuanCase {
     }
 
     //分页查询攻略-列表显示11条数据
-    @Test(testName = "攻略，列表显示11条数据", description = "分页查询攻略-列表显示11条数据")
+    @Test(testName = "分页查询攻略-列表显示11条数据", description = "分页查询攻略-列表显示11条数据")
     public void strategy_ten() {
         baseURI = suit.getBaseurl();
         given()
@@ -785,7 +785,7 @@ public class limayouxuanCase {
 
     }
     //官方攻略详情
-    @Test(testName = "攻略详情id为空", description = "分页查询攻略-列表显示11条数据")
+    @Test(testName = "攻略详情id为空", description = "攻略详情id为空")
     public void queryById_null() {
         baseURI = suit.getBaseurl();
         given()
@@ -830,7 +830,7 @@ public class limayouxuanCase {
     }
 
     //缴费记录显示1条
-    @Test(testName = "缴费记录1条", description = "力马快充，缴费记录1条数据")
+    @Test(testName = "力马快充，缴费记录1条数据", description = "力马快充，缴费记录1条数据")
     public void MemberOrderPage_one() {
         baseURI = suit.getBaseurl();
         given()
@@ -847,7 +847,7 @@ public class limayouxuanCase {
     }
 
     //缴费记录显示10条
-    @Test(testName = "缴费记录10条", description = "力马快充，缴费记录10条数据")
+    @Test(testName = "力马快充，缴费记录10条数据", description = "力马快充，缴费记录10条数据")
     public void MemberOrderPage_ten() {
         baseURI = suit.getBaseurl();
         given()
@@ -882,7 +882,7 @@ public class limayouxuanCase {
 
     //缴费记录详情，根据订单编码查询订单详情：
     //缴费记录-订单详情页-订单为空
-    @Test(testName = "缴费记录-订单号为空", description = "力马快充，订单号为空")
+    @Test(testName = "力马快充，订单号为空", description = "力马快充，订单号为空")
     public void OrderCode_null() {
         baseURI = suit.getBaseurl();
         given()
@@ -906,7 +906,7 @@ public class limayouxuanCase {
     }
 
     //缴费记录-订单详情页-正确的订单编号
-    @Test(testName = "缴费记录-正确订单编号", description = "力马快充，正确订单编号")
+    @Test(testName = "缴费记录-正确订单编号", description = "缴费记录-正确订单编号")
     public void OrderCode() {
         baseURI = suit.getBaseurl();
         given()
@@ -918,7 +918,7 @@ public class limayouxuanCase {
     }
 
     //话费-直接充值
-    @Test(testName = "话费，不输入手机号直接充值", description = "力马快充，话费直接充值")
+    @Test(testName = "话费，不输入手机号直接充值", description = "话费，不输入手机号直接充值")
     public void mobileOrder_null() {
         baseURI = suit.getBaseurl();
         given()
@@ -932,7 +932,7 @@ public class limayouxuanCase {
 
     }
 
-    //话费-输入手机号充值，充值0元
+    //话费-输入手机号充值，充值1元
     @Test(testName = "话费充值1元", description = "力马快充，输入手机号充值，充值1元")
     public void mobileOrder_tenyaun() {
         baseURI = suit.getBaseurl();
@@ -963,7 +963,7 @@ public class limayouxuanCase {
     }
 
     //加油卡，列表为空
-    @Test(testName = "加油卡商品列表为空", description = "力马快充，加油卡列表为空")
+    @Test(testName = "加油卡商品列表为空", description = "加油卡商品列表为空")
     public void getGasList_null() {
         baseURI = suit.getBaseurl();
         given()
@@ -1325,11 +1325,10 @@ public class limayouxuanCase {
                 //.body("resultCode",equalTo("7115"));
                 .body("message", equalTo("出票失败"));
 
-
-
     }
-    //智能导览
-    @Test(testName = "参数为空时默认获取周边位置", description = "智能导览")
+
+    //智能导览~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    @Test(testName = "参数为空时默认获取周边位置", description = "参数为空时默认获取周边位置")
     public void getAround() {
         baseURI = suit.getBaseurl();
         given()
@@ -1348,7 +1347,7 @@ public class limayouxuanCase {
     }
 
     //智能导览
-    @Test(testName = "参数为空时默认获取周边位置-type=住宿", description = "智能导览")
+    @Test(testName = "参数为空时默认获取周边位置-type=住宿", description = "参数为空时默认获取周边位置-type=住宿")
     public void getAround_hotel() {
         baseURI = suit.getBaseurl();
         given()
@@ -1366,7 +1365,7 @@ public class limayouxuanCase {
                 .body("message",equalTo("周边位置信息获取成功"));
     }
 
-    //个人中心-根据会员id查询会员信息~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    //个人中心-根据会员id查询会员信息~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     //会员id为空
     @Test(testName = "会员id为空", description = "会员id为空")
     public void member_null() {
@@ -1380,7 +1379,7 @@ public class limayouxuanCase {
                 .body("message", equalTo("微信会员未授权"));
     }
     //输入任意会员id
-    @Test(testName = "输入任意会员id", description = "会员id为空")
+    @Test(testName = "输入任意会员id", description = "输入任意会员id")
     public void member_error() {
         baseURI = suit.getBaseurl();
         given()
@@ -1391,7 +1390,7 @@ public class limayouxuanCase {
                 .body("resultCode",equalTo(8200));
     }
     //输入正确的会员id
-    @Test(testName = "输入任意会员id", description = "会员id为空")
+    @Test(testName = "输入正确的会员id", description = "输入正确的会员id")
     public void member_id() {
         baseURI = suit.getBaseurl();
         given()
@@ -1402,7 +1401,7 @@ public class limayouxuanCase {
                 .body("resultCode",equalTo(8200));
     }
 
-    //收藏~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    //收藏~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     //收藏列表为空
     @Test(testName = "收藏列表为空", description = "收藏列表为空")
     public void myCollectionlist_null() {
@@ -1436,7 +1435,7 @@ public class limayouxuanCase {
 
     //不传入id取消收藏
     @Test(testName = "收藏_不传入id取消收藏", description = "收藏_不传入id收藏")
-    public void canceCollection() {
+    public void canceCollection_id_no() {
         baseURI = suit.getBaseurl();
         given()
                 .formParam("tenantId", params.get("tenantId"))
@@ -1447,8 +1446,7 @@ public class limayouxuanCase {
                 .then()
                 .body("message", equalTo("微信会员未授权"));
     }
-
-    /*
+/*
     //收藏
     @Test(testName = "收藏", description = "收藏")
     public void Collection() {
@@ -1461,7 +1459,6 @@ public class limayouxuanCase {
                 .request(Method.POST, "/web/selfcenter/collect")
                 .then()
                 .body("message", equalTo("成功"));
-
     }
     //收藏列表
     @Test(testName = "收藏", description = "收藏列表" ,dependsOnMethods = "Collection")
@@ -1507,16 +1504,16 @@ public class limayouxuanCase {
                 .request(Method.POST, "/web/selfcenter/myCollectionList")
                 .then()
                 .body("message", equalTo(""));
-
     }
-     */
+ */
 
+    //收藏、取消、查看列表
     @Test(testName = "收藏、取消、查看列表", description = "收藏、取消、查看列表")
     public void Collection1() {
         try {
             String tem = "";
             TestCase testCase = caseList.get(0);
-
+            //新增一条收藏
             ResultSet resultSet = JdbcUtils.getResult(testCase.getDBsql().getSqlList().get(1), testCase.getDBsql().getJdbc());
             baseURI = suit.getBaseurl();
             Response response =
@@ -1533,48 +1530,51 @@ public class limayouxuanCase {
 
         } finally {
         }
-        Response response1 =
-                given()
-                        .formParam("tenantId", params.get("tenantId"))
-                        .formParam("type", "2")
-                        .formParam("id", "Collectionid")
-                        .formParam("pageSize", "10")
-                        .formParam("currentPage", "2")
-                        .formParam("count", "0")
-                        .formParam("loading", "true")
-                        .request(Method.POST, "/web/selfcenter/myCollectionList")
-                        .then()
-                        .body("message", equalTo(""))
-                        .extract()
-                        .response();
-        Response response2 =
-                given()
-                        .formParam("tenantId", params.get("tenantId"))
-                        .formParam("id", "Collectionid")
-                        .formParam("contentId", "692326891465474048")
-                        .formParam("type", "2")
-                        .request(Method.POST, "/web/selfcenter/cancelCollect")
-                        .then()
-                        .body("message", equalTo("成功"))
-                        .extract()
-                        .response();
+            //收藏成功列表
+            Response response1 =
+                    given()
+                            .formParam("tenantId", params.get("tenantId"))
+                            .formParam("type", "2")
+                            .formParam("id", "Collectionid")
+                            .formParam("pageSize", "10")
+                            .formParam("currentPage", "2")
+                            .formParam("count", "0")
+                            .formParam("loading", "true")
+                            .request(Method.POST, "/web/selfcenter/myCollectionList")
+                            .then()
+                            .body("message", equalTo(""))
+                            .extract()
+                            .response();
+        //取消收藏
+            Response response2 =
+                    given()
+                            .formParam("tenantId", params.get("tenantId"))
+                            .formParam("id", "Collectionid")
+                            .formParam("contentId", "692326891465474048")
+                            .formParam("type", "2")
+                            .request(Method.POST, "/web/selfcenter/cancelCollect")
+                            .then()
+                            .body("message", equalTo("成功"))
+                            .extract()
+                            .response();
+        //收藏成功列表
         Response response3 =
-                given()
-                        .formParam("tenantId", params.get("tenantId"))
-                        .formParam("type", "2")
-                        .formParam("id", "Collectionid")
-                        .formParam("pageSize", "10")
-                        .formParam("currentPage", "2")
-                        .formParam("count", "0")
-                        .formParam("loading", "true")
-                        .request(Method.POST, "/web/selfcenter/myCollectionList")
-                        .then()
-                        .body("message", equalTo(""))
-                        .extract()
-                        .response();
+                    given()
+                            .formParam("tenantId", params.get("tenantId"))
+                            .formParam("type", "2")
+                            .formParam("id", "Collectionid")
+                            .formParam("pageSize", "10")
+                            .formParam("currentPage", "2")
+                            .formParam("count", "0")
+                            .formParam("loading", "true")
+                            .request(Method.POST, "/web/selfcenter/myCollectionList")
+                            .then()
+                            .body("message", equalTo(""))
+                            .extract()
+                            .response();
     }
 
-    //我的订单~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    //我的订单~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     //待使用订单列表
     @Test(testName = "订单查询-必填项未填写", description = "订单查询-必填项未填写" )
     public void myOrderList1() {
@@ -1608,7 +1608,7 @@ public class limayouxuanCase {
 
 
 
-    //意见反馈~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    //意见反馈~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     //根据父节点code查询子节点信息（意见反馈填写）
     @Test(testName = "进入意见反馈填写为空", description = "进入意见反馈填写为空" )
     public void ChildrenByParentCode_null() {
@@ -1637,7 +1637,7 @@ public class limayouxuanCase {
     }
 
     //意见反馈-新增
-    @Test(testName = "意见反馈-新增成功（填写信息项都填写时，点击添加）", description = "新增" )
+    @Test(testName = "意见反馈-新增成功（填写信息项都填写时，点击添加）", description = "意见反馈-新增成功（填写信息项都填写时，点击添加）" )
         public void suggestions_add() {
             baseURI = suit.getBaseurl();
         Response response = given()
@@ -1660,7 +1660,7 @@ public class limayouxuanCase {
         }
 
         //意见反馈-查看
-    @Test(testName = "意见反馈-正常查看", description = "查看" ,dependsOnMethods = "suggestions_add")
+    @Test(testName = "意见反馈-正常查看", description = "意见反馈-正常查看" ,dependsOnMethods = "suggestions_add")
     public void queryByConditions() {
         baseURI = suit.getBaseurl();
         given()
@@ -1679,7 +1679,7 @@ public class limayouxuanCase {
 
     }
     //意见反馈-撤销
-    @Test(testName = "意见反馈-待处理状态时撤销", description = "撤销" ,dependsOnMethods = "queryByConditions")
+    @Test(testName = "意见反馈-待处理状态时撤销", description = "意见反馈-待处理状态时撤销" ,dependsOnMethods = "queryByConditions")
     public void suggestions_updata() {
         baseURI = suit.getBaseurl();
         given()
@@ -1693,7 +1693,7 @@ public class limayouxuanCase {
     }
 
     //意见反馈-撤销
-    @Test(testName = "意见反馈-id未填时点击撤销", description = "撤销" )
+    @Test(testName = "意见反馈-id未填时点击撤销", description = "意见反馈-id未填时点击撤销" )
     public void suggestions_null() {
         baseURI = suit.getBaseurl();
         given()
@@ -1706,7 +1706,7 @@ public class limayouxuanCase {
 
     }
     //意见反馈-撤销
-    @Test(testName = "意见反馈-输入不存在的id点击撤销", description = "撤销" )
+    @Test(testName = "意见反馈-输入不存在的id点击撤销", description = "意见反馈-输入不存在的id点击撤销" )
     public void suggestions_error() {
         baseURI = suit.getBaseurl();
         given()
@@ -1740,7 +1740,7 @@ public class limayouxuanCase {
     }
 
     //意见反馈-查看
-    @Test(testName = "意见反馈,列表为空", description = "查看" )
+    @Test(testName = "意见反馈,列表为空", description = "意见反馈,列表为空" )
     public void queryByConditions_null() {
         baseURI = suit.getBaseurl();
         given()
@@ -1757,7 +1757,7 @@ public class limayouxuanCase {
 
     }
     //意见反馈-查看
-    @Test(testName = "意见反馈-查看-必填项未填写时", description = "查看" )
+    @Test(testName = "意见反馈-查看-必填项未填写时", description = "意见反馈-查看-必填项未填写时" )
     public void queryByConditions_error() {
         baseURI = suit.getBaseurl();
         given()
@@ -1774,14 +1774,559 @@ public class limayouxuanCase {
 
     }
 
+    //特产~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    @Test(testName = "查询特产列表、id进入详情、添加购物车、查询购物车列表、编辑购物车、删除购物车记录", description = "查询特产列表、id进入详情、添加购物车、查询购物车列表、编辑购物车、删除购物车记录" )
+    public void specialty() {
+        try {
+            String tem = "";
+            TestCase testCase = caseList.get(0);
+            //插入特产、特产规格、特产图片
+            ResultSet resultSet = JdbcUtils.getResult(testCase.getDBsql().getSqlList().get(4),testCase.getDBsql().getJdbc());
+            ResultSet resultSet1 = JdbcUtils.getResult(testCase.getDBsql().getSqlList().get(5),testCase.getDBsql().getJdbc());
+            ResultSet resultSet2 = JdbcUtils.getResult(testCase.getDBsql().getSqlList().get(6),testCase.getDBsql().getJdbc());
+            ResultSet resultSet3 = JdbcUtils.getResult(testCase.getDBsql().getSqlList().get(11),testCase.getDBsql().getJdbc());
+            baseURI = suit.getBaseurl();
+              //查询特产列表
+            Response response =
+                given()
+                        .contentType("application/x-www-form-urlencoded;charset=utf-8")
+                        .formParam("tenantId", params.get("tenantId"))
+                        .formParam("productName", "")
+                        .formParam("currentPage", "1")
+                        .formParam("pageSize", "10")
+                        .request(Method.POST, "/web/specialty/queryPage")
+                        .then()
+                        .body("resultCode", equalTo(8200))
+                        .extract()
+                        .response();
+
+        }finally {
+        }
+             //根据id进入详情
+            Response response1 =
+                given()
+                        .contentType("application/x-www-form-urlencoded;charset=utf-8")
+                        .formParam("tenantId", params.get("tenantId"))
+                        .formParam("id", "123456789")
+                        .request(Method.POST, "/web/specialty/queryById")
+                        .then()
+                        .body("message", equalTo(""))
+                        .body("resultCode",equalTo(8200))
+                        .extract()
+                        .response();
+           //添加购物车
+            Response response2 =
+                given()
+                        .contentType("application/x-www-form-urlencoded;charset=utf-8")
+                        .formParam("tenantId", params.get("tenantId"))
+                        .formParam("productId", "123456789")
+                        .formParam("productName", "插入特产")
+                        .formParam("coverImageUrl", "/ 202007 / 14 / bc4223da - 8e40-4f6d - a037 - 4a3b5e12412d.jpg")
+                        .formParam("skuId", "1")
+                        .formParam("skuName", "规格1")
+                        .formParam("quantity", "1")
+                        .formParam("joinPrice", "0.01")
+                        .formParam("memberId", params.get("memberId"))
+                        .request(Method.POST, "/web/specialty/addCartInfo")
+                        .then()
+                        .body("message", equalTo(""))
+                        .body("resultCode",equalTo(8200))
+                        .extract()
+                        .response();
+                        String cartInfoId = response2.path("data");
+                        params.put("cartInfoId",cartInfoId);
+            //查询购物车列表
+            Response response3 =
+                given()
+                        .contentType("application/x-www-form-urlencoded;charset=utf-8")
+                        .formParam("tenantId", params.get("tenantId"))
+                        .formParam("memberId", params.get("memberId"))
+                        .request(Method.POST, "/web/specialty/queryCartInfoList")
+                        .then()
+                        .body("message", equalTo(""))
+                        .body("resultCode",equalTo(8200))
+                        //.body("data.id",hasItem(params.get("cartInfoId")))
+                        .extract()
+                        .response();
+            //编辑购物车
+            Response response4 =
+                given()
+                        .contentType("application/x-www-form-urlencoded;charset=utf-8")
+                        .formParam("tenantId", params.get("tenantId"))
+                        .formParam("cartInfoId", cartInfoId)
+                        .formParam("number","2")
+                        .request(Method.POST, "/web/specialty/updateCartInfo")
+                        .then()
+                        .body("message", equalTo(""))
+                        .body("resultCode",equalTo(8200))
+                        .extract()
+                        .response();
+            //查询购物车列表
+            Response response5 =
+                given()
+                        .contentType("application/x-www-form-urlencoded;charset=utf-8")
+                        .formParam("tenantId", params.get("tenantId"))
+                        .formParam("memberId", params.get("memberId"))
+                        .request(Method.POST, "/web/specialty/queryCartInfoList")
+                        .then()
+                        .body("message", equalTo(""))
+                        .body("resultCode",equalTo(8200))
+                        .extract()
+                        .response();
+            //删除购物车
+            Response response6 =
+                given()
+                        .formParam("tenantId", params.get("tenantId"))
+                        .formParam("cartInfoId", cartInfoId)
+                        .request(Method.POST, "/web/specialty/deletedCartInfo")
+                        .then()
+                        .body("message", equalTo(""))
+                        .body("resultCode",equalTo(8200))
+                        .extract()
+                        .response();
+
+
+    }
+
+
+
+     /*
+    @Story("插入特产")
+    @Test(description = "通过sql语句查询数据库信息，进行断言")
+    public void specialty_assert(){
+        try {
+            String tem="";
+            TestCase testCase = caseList.get(0);
+            ResultSet resultSet = JdbcUtils.getResult(testCase.getDBsql().getSqlList().get(4), testCase.getDBsql().getJdbc());
+            ResultSet resultSet1 = JdbcUtils.getResult(testCase.getDBsql().getSqlList().get(10), testCase.getDBsql().getJdbc());
+            while (resultSet.next()){
+                tem = resultSet.getString("product_name");
+            }
+            Assert.assertEquals("插入特产", tem);
+            //Assert.assertNotEquals("",tem);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+      */
+
+    //特产收货地址
+    @Test(testName = "新增收货地址、查询收货地址、查询收货地址详情、修改收货地址、删除收货地址", description = "新增收货地址、查询收货地址、查询收货地址详情、修改收货地址、删除收货地址" )
+    public void DeliveryAddress() {
+        try {
+            String tem = "";
+            TestCase testCase = caseList.get(0);
+            baseURI = suit.getBaseurl();
+            //新增收货地址
+            Response response =
+                given()
+                        .contentType("application/x-www-form-urlencoded;charset=utf-8")
+                        .formParam("tenantId", params.get("tenantId"))
+                        .formParam("detailAddressID", "0")
+                        .formParam("receiverName", "测试新增名称")
+                        .formParam("phone", params.get("phone"))
+                        .formParam("addressName", "北京北京市东城区")
+                        .formParam("provinceCode", "110000000000")
+                        .formParam("cityCode", "110100000000")
+                        .formParam("districtCode", "110101000000")
+                        .formParam("detailAddress", "测试详细地址")
+                        .formParam("status", "0")
+                        .formParam("address", "北京北京市东城区测试详细地址")
+                        .formParam("memberId", params.get("memberId"))
+                        .request(Method.POST, "/web/specialty/addDeliveryAddress")
+                        .then()
+                        .body("resultCode", equalTo(8200))
+                        .extract()
+                        .response();
+        }finally {
+        }
+            //查询收货地址
+            Response response1 =
+                given()
+                        .contentType("application/x-www-form-urlencoded;charset=utf-8")
+                        .formParam("tenantId", params.get("tenantId"))
+                        .formParam("memberId", params.get("memberId"))
+                        .request(Method.POST, "/web/specialty/queryDeliveryAddressList")
+                        .then()
+                        .body("message", equalTo(""))
+                        .body("resultCode",equalTo(8200))
+                        .extract()
+                        .response();
+                    String address_id = response1.path("data.deliveryAddressList[0].id");
+                    params.put("id",address_id);
+            //查询收货地址详情
+            Response response2 =
+                given()
+                        .contentType("application/x-www-form-urlencoded;charset=utf-8")
+                        .formParam("tenantId", params.get("tenantId"))
+                        .formParam("id", address_id)
+                        .formParam("memberId", params.get("memberId"))
+                        .request(Method.POST, "/web/specialty/queryDeliveryAddressInfo")
+                        .then()
+                        .body("message", equalTo(""))
+                        .body("resultCode",equalTo(8200))
+                        .extract()
+                        .response();
+            //修改收获地址
+            Response response3 =
+                given()
+                        .contentType("application/x-www-form-urlencoded;charset=utf-8")
+                        .formParam("id", address_id)
+                        .formParam("cityCode", "110100000000")
+                        .formParam("detailAddress", "11111")
+                        .formParam("districtCode", "110101000000")
+                        .formParam("receiverName", "测试新增名称修改")
+                        .formParam("phone", params.get("phone"))
+                        .formParam("provinceCode", "110000000000")
+                        .formParam("detailAddress", "测试详细地址")
+                        .formParam("status", "0")
+                        .formParam("memberId", params.get("memberId"))
+                        .request(Method.POST, "/web/specialty/updateDeliveryAddress")
+                        .then()
+                        .body("message", equalTo(""))
+                        .body("resultCode",equalTo(8200))
+                        .extract()
+                        .response();
+            //删除收货地址
+            Response response4 =
+                given()
+                        .contentType("application/x-www-form-urlencoded;charset=utf-8")
+                        .formParam("tenantId", params.get("tenantId"))
+                        .formParam("id", address_id)
+                        .request(Method.POST, "/web/specialty/deletedDeliveryAddress")
+                        .then()
+                        .body("message", equalTo(""))
+                        .body("resultCode",equalTo(8200))
+                        .extract()
+                        .response();
+
+
+
+    }
+    //查询特产列表-必填项为空
+    @Test(testName = "查询特产列表-必填项为空", description = "查询特产列表-必填项为空" )
+    public void specialty_queryPage_null() {
+        baseURI = suit.getBaseurl();
+        given()
+                .formParam("tenantId", "")
+                .formParam("pageSize", "")
+                .formParam("currentPage", "")
+                .formParam("productName", "")
+                .request(Method.POST, "/web/specialty/queryPage")
+                .then()
+                .body("resultCode", equalTo(8200));
+
+    }
+    //查询特产列表-输入整数值
+    @Test(testName = "查询特产列表-必填项输入整数值", description = "查询特产列表-必填项输入整数值" )
+    public void specialty_queryPage() {
+        baseURI = suit.getBaseurl();
+        given()
+                .formParam("tenantId", "1")
+                .formParam("pageSize", "1")
+                .formParam("currentPage", "1")
+                .formParam("productName", "1")
+                .request(Method.POST, "/web/specialty/queryPage")
+                .then()
+                .body("resultCode", equalTo(8200));
+
+    }
+    //根据特产id进入详情-id为空
+    @Test(testName = "根据特产id进入详情-id为空", description = "根据特产id进入详情-id为空" )
+    public void specialty_Byid() {
+        baseURI = suit.getBaseurl();
+        given()
+                .formParam("tenantId", params.get("tenantId"))
+                .formParam("id", "")
+                .request(Method.POST, "/web/specialty/queryById")
+                .then()
+                .body("message", equalTo("产品id不能是空"))
+                .body("resultCode",equalTo(8500));
+
+    }
+    //根据特产id进入详情-输入不存在的id
+    @Test(testName = "根据特产id进入详情-输入不存在的id", description = "根据特产id进入详情-输入不存在的id" )
+    public void specialty_Byiderror() {
+        baseURI = suit.getBaseurl();
+        given()
+                .formParam("tenantId", params.get("tenantId"))
+                .formParam("id", "12")
+                .request(Method.POST, "/web/specialty/queryById")
+                .then()
+                .body("message", equalTo(""))
+                .body("resultCode",equalTo(8200));
+
+    }
+    //添加购物车-全部字段为空
+    @Test(testName = "添加购物车-全部字段为空", description = "添加购物车-全部字段为空" )
+    public void addCart_null() {
+        baseURI = suit.getBaseurl();
+        given()
+                .formParam("tenantId", "")
+                .formParam("productId", "")
+                .formParam("productName", "")
+                .formParam("coverImageUrl", "")
+                .formParam("skuId", "")
+                .formParam("skuName", "")
+                .formParam("quantity", "")
+                .formParam("joinPrice", "")
+                .formParam("memberId", "")
+                .request(Method.POST, "/web/specialty/addCartInfo")
+                .then()
+                .body("message", equalTo("封面图片不能为空"))
+                .body("resultCode",equalTo(8500));
+    }
+    //添加购物车-输入不存在的值
+    @Test(testName = "添加购物车-输入不存在的值", description = "添加购物车-输入不存在的值" )
+    public void addCart_error() {
+        baseURI = suit.getBaseurl();
+        given()
+                .formParam("tenantId", "1")
+                .formParam("productId", "1")
+                .formParam("productName", "1")
+                .formParam("coverImageUrl", "1")
+                .formParam("skuId", "1")
+                .formParam("skuName", "1")
+                .formParam("quantity", "1")
+                .formParam("joinPrice", "1")
+                .formParam("memberId", "1")
+                .request(Method.POST, "/web/specialty/addCartInfo")
+                .then()
+                .body("message", equalTo(""))
+                .body("resultCode",equalTo(8200));
+    }
+    //查询购物车信息列表-memberId为空
+    @Test(testName = "查询购物车信息列表-memberId为空", description = "查询购物车信息列表-memberId为空" )
+    public void queryCartInfoList_null() {
+        baseURI = suit.getBaseurl();
+        given()
+                .formParam("tenantId", "")
+                .formParam("memberId", "")
+                .request(Method.POST, "/web/specialty/queryCartInfoList")
+                .then()
+                .body("message", equalTo("会员id不能为空"))
+                .body("resultCode",equalTo(8500));
+    }
+    //查询购物车信息列表-输入不存在的memberId
+    @Test(testName = "查询购物车信息列表-输入不存在的memberId", description = "查询购物车信息列表-输入不存在的memberId" )
+    public void queryCartInfoList_no() {
+        baseURI = suit.getBaseurl();
+        given()
+                .formParam("tenantId", "1")
+                .formParam("memberId", "1")
+                .request(Method.POST, "/web/specialty/queryCartInfoList")
+                .then()
+                .body("message", equalTo(""))
+                .body("resultCode",equalTo(8500));
+    }
+    //编辑购物车信息-数量为空时编辑
+    @Test(testName = "编辑购物车信息-数量为空时编辑", description = "编辑购物车信息-数量为空时编辑" )
+    public void updateCartInfo_null() {
+        baseURI = suit.getBaseurl();
+        given()
+                .formParam("tenantId", "")
+                .formParam("cartInfoId", "")
+                .formParam("number","")
+                .request(Method.POST, "/web/specialty/updateCartInfo")
+                .then()
+                .body("message", equalTo("购物车信息id不能为空"))
+                .body("resultCode",equalTo(8500));
+    }
+    //编辑购物车信息-数量为负数时编辑
+    @Test(testName = "编辑购物车信息-数量为负数时编辑", description = "编辑购物车信息-数量为负数时编辑" )
+    public void updateCartInfo_() {
+        baseURI = suit.getBaseurl();
+        given()
+                .formParam("tenantId", "")
+                .formParam("cartInfoId", "1")
+                .formParam("number","-1")
+                .request(Method.POST, "/web/specialty/updateCartInfo")
+                .then()
+                .body("message", equalTo("数量要大于0"))
+                .body("resultCode",equalTo(8500));
+    }
+    //删除购物车记录-cartInfoId为空
+    @Test(testName = "删除购物车记录-cartInfoId为空", description = "删除购物车记录-cartInfoId为空" )
+    public void deletedCartInfo_null() {
+        baseURI = suit.getBaseurl();
+        given()
+                .formParam("tenantId", "")
+                .formParam("cartInfoId", "")
+                .request(Method.POST, "/web/specialty/deletedCartInfo")
+                .then()
+                .body("message", equalTo("购物车信息id不能为空"))
+                .body("resultCode",equalTo(8500));
+    }
+    //删除购物车记录-输入不存在的cartInfoId
+    @Test(testName = "删除购物车记录-输入不存在的cartInfoId", description = "删除购物车记录-输入不存在的cartInfoId" )
+    public void deletedCartInfo_no() {
+        baseURI = suit.getBaseurl();
+        given()
+                .formParam("tenantId", "")
+                .formParam("cartInfoId", "1")
+                .request(Method.POST, "/web/specialty/deletedCartInfo")
+                .then()
+                .body("message", equalTo(""))
+                .body("resultCode",equalTo(8200));
+    }
+
+    //新增收货地址-所有参数为空时新增
+    @Test(testName = "新增收货地址-所有参数为空时新增", description = "新增收货地址-所有参数为空时新增" )
+    public void addDeliveryAddress_null() {
+        baseURI = suit.getBaseurl();
+        given()
+                .formParam("tenantId", "")
+                .formParam("detailAddressID", "")
+                .formParam("receiverName", "")
+                .formParam("phone", "")
+                .formParam("addressName", "")
+                .formParam("provinceCode", "")
+                .formParam("cityCode", "")
+                .formParam("districtCode", "")
+                .formParam("detailAddress", "")
+                .formParam("status", "")
+                .formParam("address", "")
+                .formParam("memberId", "")
+                .request(Method.POST, "/web/specialty/addDeliveryAddress")
+                .then()
+                .body("message",equalTo("收货人不能为空"))
+                .body("resultCode", equalTo(8500));
+    }
+    //编辑收货地址-编辑页为空时
+    @Test(testName = "编辑收货地址-编辑页为空时", description = "编辑收货地址-编辑页为空时" )
+    public void updateDeliveryAddress_null() {
+        baseURI = suit.getBaseurl();
+        given()
+                .formParam("id", "")
+                .formParam("cityCode", "")
+                .formParam("detailAddress", "")
+                .formParam("districtCode", "")
+                .formParam("receiverName", "")
+                .formParam("phone", "")
+                .formParam("provinceCode", "")
+                .formParam("detailAddress", "")
+                .formParam("status", "")
+                .formParam("memberId", "")
+                .request(Method.POST, "/web/specialty/updateDeliveryAddress")
+                .then()
+                .body("message", equalTo("收货人不能为空"))
+                .body("resultCode",equalTo(8500));
+    }
+    //编辑收货地址-输入不存在的id编辑
+    @Test(testName = "编辑收货地址-输入不存在的id编辑", description = "编辑收货地址-输入不存在的id编辑" )
+    public void updateDeliveryAddress_no() {
+        baseURI = suit.getBaseurl();
+        given()
+                .formParam("id", "1")
+                .formParam("cityCode", "1")
+                .formParam("detailAddress", "1")
+                .formParam("districtCode", "1")
+                .formParam("receiverName", "1")
+                .formParam("phone", "1")
+                .formParam("provinceCode", "1")
+                .formParam("detailAddress", "1")
+                .formParam("status", "1")
+                .formParam("memberId", "1")
+                .request(Method.POST, "/web/specialty/updateDeliveryAddress")
+                .then()
+                .body("message", equalTo(""))
+                .body("resultCode",equalTo(8200));
+    }
+    //查询收货地址列表-memberId为空
+    @Test(testName = "查询收货地址列表-memberId为空", description = "查询收货地址列表-memberId为空" )
+    public void queryDeliveryAddressList_null() {
+        baseURI = suit.getBaseurl();
+        given()
+                .formParam("tenantId", params.get("tenantId"))
+                .formParam("memberId", "")
+                .request(Method.POST, "/web/specialty/queryDeliveryAddressList")
+                .then()
+                .body("message", equalTo("会员id不能为空"))
+                .body("resultCode",equalTo(8500));
+    }
+    //查询收货地址列表-输入不存在的memberId
+    @Test(testName = "查询收货地址列表-输入不存在的memberId", description = "查询收货地址列表-输入不存在的memberId" )
+    public void queryDeliveryAddressList_no() {
+        baseURI = suit.getBaseurl();
+        given()
+                .formParam("tenantId", params.get("tenantId"))
+                .formParam("memberId", "1")
+                .request(Method.POST, "/web/specialty/queryDeliveryAddressList")
+                .then()
+                .body("message", equalTo(""))
+                .body("resultCode",equalTo(8200));
+    }
+
+    //查询收货地址详情-id为空时查询
+    @Test(testName = "查询收货地址详情-id为空时查询", description = "查询收货地址详情-id为空时查询" )
+    public void queryDeliveryAddressInfo_null() {
+        baseURI = suit.getBaseurl();
+        given()
+                .formParam("tenantId", "")
+                .formParam("id", "")
+                .formParam("memberId", "")
+                .request(Method.POST, "/web/specialty/queryDeliveryAddressInfo")
+                .then()
+                .body("message", equalTo("收货地址id不能为空"))
+                .body("resultCode",equalTo(8500));
+    }
+    //查询收货地址详情-输入不存在的id查询
+    @Test(testName = "查询收货地址详情-输入不存在的id查询", description = "查询收货地址详情-输入不存在的id查询" )
+    public void queryDeliveryAddressInfo_no() {
+        baseURI = suit.getBaseurl();
+        given()
+                .formParam("tenantId", "1")
+                .formParam("id", "1")
+                .formParam("memberId", "1")
+                .request(Method.POST, "/web/specialty/queryDeliveryAddressInfo")
+                .then()
+                .body("message", equalTo(""))
+                .body("resultCode",equalTo(8200));
+    }
+
+    //删除收货地址-id为空
+    @Test(testName = "删除收货地址-id为空", description = "删除收货地址-id为空" )
+    public void deletedDeliveryAddress_null() {
+        baseURI = suit.getBaseurl();
+        given()
+                .formParam("tenantId", "")
+                .formParam("id", "")
+                .request(Method.POST, "/web/specialty/deletedDeliveryAddress")
+                .then()
+                .body("message", equalTo("收货地址id不能为空"))
+                .body("resultCode",equalTo(8500));
+    }
+    //删除收货地址-输入不存在的id
+    @Test(testName = "删除收货地址-输入不存在的id", description = "删除收货地址-输入不存在的id" )
+    public void deletedDeliveryAddress_no() {
+        baseURI = suit.getBaseurl();
+        given()
+                .formParam("tenantId", "1")
+                .formParam("id", "1")
+                .request(Method.POST, "/web/specialty/deletedDeliveryAddress")
+                .then()
+                .body("message", equalTo(""))
+                .body("resultCode",equalTo(8200));
+    }
+
+
+
     @AfterClass
     public void clean(){
         JdbcUtils.closeConn();
         String tem = "";
         TestCase testCase = caseList.get(0);
+        //删除会员id=99
         ResultSet resultSet = JdbcUtils.getResult(testCase.getDBsql().getSqlList().get(2), testCase.getDBsql().getJdbc());
+        //删除id=735525580992151552
         ResultSet resultSet1 = JdbcUtils.getResult(testCase.getDBsql().getSqlList().get(3), testCase.getDBsql().getJdbc());
+        //删除特产
+        //ResultSet resultSet2 = JdbcUtils.getResult(testCase.getDBsql().getSqlList().get(7),testCase.getDBsql().getJdbc());
+        //删除特产规格
+       // ResultSet resultSet3 = JdbcUtils.getResult(testCase.getDBsql().getSqlList().get(8),testCase.getDBsql().getJdbc());
+        //删除特产图片
+       // ResultSet resultSet4 = JdbcUtils.getResult(testCase.getDBsql().getSqlList().get(9),testCase.getDBsql().getJdbc());
+
     }
-
-
 }

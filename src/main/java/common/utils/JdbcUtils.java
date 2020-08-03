@@ -55,6 +55,7 @@ public class JdbcUtils {
                 setStatement(jdbc);
             }
             statement.execute(sql);
+            resultSet =statement.getResultSet();
 
             logger.debug("数据库操作语句执行成功");
 

@@ -78,7 +78,7 @@ public class Demo2TestCase {
 //        {
 //            "code":8200,
 //                "data":{
-//            "id":"1185109714373382146",
+//                       "id":"1185109714373382146",
 //                    "image":"",
 //                    "token":"3b1bd0b7-6bac-482d-86e6-62d6e1bb5a7c",
 //                    "user_name":"liangshuihe"
@@ -109,6 +109,7 @@ public class Demo2TestCase {
                 tem = resultSet.getString("name");
             }
             Assert.assertEquals("刘成成", tem);
+            //Assert.assertNotEquals("",tem);
         }catch (Exception e){
             e.printStackTrace();
         }
