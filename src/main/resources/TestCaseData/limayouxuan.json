@@ -31,7 +31,6 @@
           "SELECT * FROM specialty_product_info  WHERE product_name = '插入特产'",
           "INSERT INTO specialty_detail_info(id,product_id,transport_type_code,province_code,city_code,introduce,purchase_notice,is_deleted,creator_id,create_time,modified_id,modified_time,is_visible)\n\tVALUES\n\t(1,123456789,'default_transport',110000000000,110100000000,'产品介绍','购买须知',0,1,NOW(),1,NOW(),1)"
 
-
         ]
       }
     }

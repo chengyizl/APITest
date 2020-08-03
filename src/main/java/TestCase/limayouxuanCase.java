@@ -82,7 +82,7 @@ public class limayouxuanCase {
 
     //h5登录~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     //正常登录成功
-    @Test(testName = "正常登录成功", description = "正常登录成功")
+    @Test(testName = "登录-正常登录成功", description = "登录-正常登录成功")
     public void login(ITestContext context) {
         baseURI = suit.getBaseurl();
         // 通过redis 获取验证码
@@ -110,7 +110,7 @@ public class limayouxuanCase {
         }
 
     //登录时租户id为空
-    @Test(testName = "租户id为空", description = "租户id为空")
+    @Test(testName = "登录-租户id为空", description = "登录-租户id为空")
     public void login_error() {
         baseURI = suit.getBaseurl();
         given()
@@ -126,7 +126,7 @@ public class limayouxuanCase {
     }
 
     //是否为新用户
-    @Test(testName = "是否为新用户", description = "是否为新用户")
+    @Test(testName = "登录-是否为新用户", description = "登录-是否为新用户")
     public void login_isNewMember() {
         try {
             String tem = "";
@@ -369,7 +369,7 @@ public class limayouxuanCase {
     }
 
     //景区详情传入景区scenicId，tenantId/memberId可传可不传
-    @Test(testName = "景区详情-传入正确的景区scenicId", description = "景区详情传入正确的景区scenicId")
+    @Test(testName = "景区详情-传入正确的景区scenicId", description = "景区详情-传入正确的景区scenicId")
     public void ScenicDetailById() {
         baseURI = suit.getBaseurl();
         given()
@@ -416,7 +416,7 @@ public class limayouxuanCase {
     }
 
     //输入正确的景区id
-    @Test(testName = "门票-输入正确的景区id", description = "输入正确的景区id")
+    @Test(testName = "门票-输入正确的景区id", description = "门票-输入正确的景区id")
     public void ticket() {
         baseURI = suit.getBaseurl();
         given()
@@ -931,16 +931,29 @@ public class limayouxuanCase {
                 .body("message", equalTo("手机号不能为空"));
 
     }
+    //话费-输入手机号充值，充值0.01元
+    @Test(testName = "话费充值0.01元", description = "力马快充，输入手机号充值，充值0.01元")
+    public void mobileOrder_yaun() {
+        baseURI = suit.getBaseurl();
+        given()
+                .formParam("tenantId", params.get("tenantId"))
+                .formParam("memberId", params.get("memberId"))
+                .formParam("mobileNo", "18727083743")
+                .formParam("rechargeAmount", "0.01")
+                .request(Method.POST, "/web/serveOrder/mobileOrder")
+                .then()
+                .body("message", equalTo(""));
 
-    //话费-输入手机号充值，充值1元
-    @Test(testName = "话费充值1元", description = "力马快充，输入手机号充值，充值1元")
+    }
+    //话费-输入手机号充值，充值1.58元
+    @Test(testName = "话费充值1.58元", description = "力马快充，输入手机号充值，充值1.58元")
     public void mobileOrder_tenyaun() {
         baseURI = suit.getBaseurl();
         given()
                 .formParam("tenantId", params.get("tenantId"))
                 .formParam("memberId", params.get("memberId"))
                 .formParam("mobileNo", "18727083743")
-                .formParam("rechargeAmount", "1")
+                .formParam("rechargeAmount", "1.58")
                 .request(Method.POST, "/web/serveOrder/mobileOrder")
                 .then()
                 .body("message", equalTo(""));
@@ -963,7 +976,7 @@ public class limayouxuanCase {
     }
 
     //加油卡，列表为空
-    @Test(testName = "加油卡商品列表为空", description = "加油卡商品列表为空")
+    @Test(testName = "加油卡-商品列表为空", description = "加油卡-商品列表为空")
     public void getGasList_null() {
         baseURI = suit.getBaseurl();
         given()
@@ -976,7 +989,7 @@ public class limayouxuanCase {
 
     }
     //加油卡，商品列表正常查询成功
-    @Test(testName = "商品列表正常查询成功", description = "力马快充，加油卡列表正常显示")
+    @Test(testName = "加油卡-商品列表正常查询成功", description = "加油卡-商品列表正常查询成功")
     public void getGasList() {
         baseURI = suit.getBaseurl();
         given()
@@ -1065,7 +1078,7 @@ public class limayouxuanCase {
     }
 
     //水电煤接口，商品必填项全部不填写
-    @Test(testName = "水电煤，必填项为空", description = "水电煤接口，商品必填项全部不填写")
+    @Test(testName = "水电煤，必填项为空", description = "水电煤，必填项为空")
     public void serveOrdergetItemList_null() {
         baseURI = suit.getBaseurl();
         given()
@@ -1085,7 +1098,7 @@ public class limayouxuanCase {
     }
 
     //水电煤接口，商品列表正常显示
-    @Test(testName = "水电煤，商品列表正常显示", description = "水电煤接口，商品必填项全部不填写")
+    @Test(testName = "水电煤，商品列表正常显示", description = "水电煤，商品列表正常显示")
     public void serveOrdergetItemList() {
         baseURI = suit.getBaseurl();
         given()
@@ -1103,7 +1116,7 @@ public class limayouxuanCase {
     }
 
     //水电煤接口，输入不存在的省份(默认查询成功，但无省份数据)
-    @Test(testName = "水电煤，输入不存在的省份", description = "输入不存在的省份")
+    @Test(testName = "水电煤，输入不存在的省份", description = "水电煤，输入不存在的省份")
     public void serveOrdergetItemList_no() {
         baseURI = suit.getBaseurl();
         given()
@@ -1143,7 +1156,7 @@ public class limayouxuanCase {
     }
 
     //水电煤订单接口，输入不存在的租户id
-    @Test(testName = "水电煤，输入不存在的租户id", description = "水电煤，订单必填项为空时立即充值")
+    @Test(testName = "水电煤，输入不存在的租户id", description = "水电煤，输入不存在的租户id")
     public void waterOrder_notenantid() {
         baseURI = suit.getBaseurl();
         given()
@@ -1164,7 +1177,7 @@ public class limayouxuanCase {
 
     }
     //水电煤订单接口，输入存在的租户id
-    @Test(testName = "水电煤，输入存在的租户id", description = "水电煤，订单必填项为空时立即充值")
+    @Test(testName = "水电煤，输入存在的租户id", description = "水电煤，输入存在的租户id")
     public void waterOrder_id() {
         baseURI = suit.getBaseurl();
         given()
@@ -1508,7 +1521,7 @@ public class limayouxuanCase {
  */
 
     //收藏、取消、查看列表
-    @Test(testName = "收藏、取消、查看列表", description = "收藏、取消、查看列表")
+    @Test(testName = "收藏成功、取消成功、查看列表", description = "收藏、取消、查看列表")
     public void Collection1() {
         try {
             String tem = "";
@@ -1517,6 +1530,7 @@ public class limayouxuanCase {
             ResultSet resultSet = JdbcUtils.getResult(testCase.getDBsql().getSqlList().get(1), testCase.getDBsql().getJdbc());
             baseURI = suit.getBaseurl();
             Response response =
+                    //收藏成功
                     given()
                             .formParam("tenantId", params.get("tenantId"))
                             .formParam("id", "Collectionid")
@@ -1576,7 +1590,7 @@ public class limayouxuanCase {
 
     //我的订单~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     //待使用订单列表
-    @Test(testName = "订单查询-必填项未填写", description = "订单查询-必填项未填写" )
+    @Test(testName = "待使用订单查询-必填项未填写", description = "订单查询-必填项未填写" )
     public void myOrderList1() {
         baseURI = suit.getBaseurl();
         given()
@@ -1591,7 +1605,7 @@ public class limayouxuanCase {
 
     }
     //待使用订单列表
-    @Test(testName = "订单查询-全部必填项填写", description = "订单查询-必填项未填写orderStatus=3000/4000/5000" )
+    @Test(testName = "待使用订单查询-全部必填项填写", description = "订单查询-必填项未填写orderStatus=3000/4000/5000" )
     public void myOrderList() {
         baseURI = suit.getBaseurl();
         given()
@@ -1610,7 +1624,7 @@ public class limayouxuanCase {
 
     //意见反馈~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     //根据父节点code查询子节点信息（意见反馈填写）
-    @Test(testName = "进入意见反馈填写为空", description = "进入意见反馈填写为空" )
+    @Test(testName = "意见反馈填写为空", description = "意见反馈填写为空" )
     public void ChildrenByParentCode_null() {
         baseURI = suit.getBaseurl();
         given()
@@ -1623,7 +1637,7 @@ public class limayouxuanCase {
 
     }
     //根据父节点code查询子节点信息（意见反馈填写）
-    @Test(testName = "正常进入填写页面", description = "正常进入填写页面" )
+    @Test(testName = "意见反馈-正常进入填写页面", description = "意见反馈-正常进入填写页面" )
     public void ChildrenByParentCode() {
         baseURI = suit.getBaseurl();
         given()
@@ -1720,7 +1734,7 @@ public class limayouxuanCase {
     }
 
     //意见反馈，填写信息项为空时新增
-    @Test(testName = "意见反馈-填写信息项为空时", description = "新增" )
+    @Test(testName = "意见反馈-填写信息项添加为空时", description = "意见反馈-填写信息项添加为空时" )
     public void suggestions_addnull() {
         baseURI = suit.getBaseurl();
         given()
@@ -2322,11 +2336,11 @@ public class limayouxuanCase {
         //删除id=735525580992151552
         ResultSet resultSet1 = JdbcUtils.getResult(testCase.getDBsql().getSqlList().get(3), testCase.getDBsql().getJdbc());
         //删除特产
-        //ResultSet resultSet2 = JdbcUtils.getResult(testCase.getDBsql().getSqlList().get(7),testCase.getDBsql().getJdbc());
+        ResultSet resultSet2 = JdbcUtils.getResult(testCase.getDBsql().getSqlList().get(7),testCase.getDBsql().getJdbc());
         //删除特产规格
-       // ResultSet resultSet3 = JdbcUtils.getResult(testCase.getDBsql().getSqlList().get(8),testCase.getDBsql().getJdbc());
+        ResultSet resultSet3 = JdbcUtils.getResult(testCase.getDBsql().getSqlList().get(8),testCase.getDBsql().getJdbc());
         //删除特产图片
-       // ResultSet resultSet4 = JdbcUtils.getResult(testCase.getDBsql().getSqlList().get(9),testCase.getDBsql().getJdbc());
+        ResultSet resultSet4 = JdbcUtils.getResult(testCase.getDBsql().getSqlList().get(9),testCase.getDBsql().getJdbc());
 
     }
 }
