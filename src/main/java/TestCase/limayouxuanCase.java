@@ -1650,7 +1650,7 @@ public class limayouxuanCase {
 
     }
 
-    //意见反馈-新增
+    //意见反馈-新增成功（填写信息项都填写时，点击添加）
     @Test(testName = "意见反馈-新增成功（填写信息项都填写时，点击添加）", description = "意见反馈-新增成功（填写信息项都填写时，点击添加）" )
         public void suggestions_add() {
             baseURI = suit.getBaseurl();
@@ -1673,7 +1673,7 @@ public class limayouxuanCase {
 
         }
 
-        //意见反馈-查看
+        //意见反馈-正常查看
     @Test(testName = "意见反馈-正常查看", description = "意见反馈-正常查看" ,dependsOnMethods = "suggestions_add")
     public void queryByConditions() {
         baseURI = suit.getBaseurl();
@@ -1692,7 +1692,7 @@ public class limayouxuanCase {
                 .body("list.id",hasItem(params.get("suggestions_id")));
 
     }
-    //意见反馈-撤销
+    //意见反馈-待处理状态时撤销
     @Test(testName = "意见反馈-待处理状态时撤销", description = "意见反馈-待处理状态时撤销" ,dependsOnMethods = "queryByConditions")
     public void suggestions_updata() {
         baseURI = suit.getBaseurl();
@@ -1702,11 +1702,11 @@ public class limayouxuanCase {
                 .request(Method.POST, "/web/complaint/updateCancel")
                 .then()
                 .body("message", equalTo("撤销成功"));
-
-
     }
 
-    //意见反馈-撤销
+
+
+    //意见反馈-id未填时点击撤销
     @Test(testName = "意见反馈-id未填时点击撤销", description = "意见反馈-id未填时点击撤销" )
     public void suggestions_null() {
         baseURI = suit.getBaseurl();
@@ -1719,7 +1719,7 @@ public class limayouxuanCase {
 
 
     }
-    //意见反馈-撤销
+    //意见反馈-输入不存在的id点击撤销
     @Test(testName = "意见反馈-输入不存在的id点击撤销", description = "意见反馈-输入不存在的id点击撤销" )
     public void suggestions_error() {
         baseURI = suit.getBaseurl();
@@ -1733,7 +1733,7 @@ public class limayouxuanCase {
 
     }
 
-    //意见反馈，填写信息项为空时新增
+    //意见反馈-填写信息项添加为空时
     @Test(testName = "意见反馈-填写信息项添加为空时", description = "意见反馈-填写信息项添加为空时" )
     public void suggestions_addnull() {
         baseURI = suit.getBaseurl();
@@ -1753,7 +1753,7 @@ public class limayouxuanCase {
 
     }
 
-    //意见反馈-查看
+    //意见反馈,列表为空
     @Test(testName = "意见反馈,列表为空", description = "意见反馈,列表为空" )
     public void queryByConditions_null() {
         baseURI = suit.getBaseurl();
@@ -1770,7 +1770,7 @@ public class limayouxuanCase {
                 .body("resultCode", equalTo(8200));
 
     }
-    //意见反馈-查看
+    //意见反馈-查看-必填项未填写时
     @Test(testName = "意见反馈-查看-必填项未填写时", description = "意见反馈-查看-必填项未填写时" )
     public void queryByConditions_error() {
         baseURI = suit.getBaseurl();
@@ -1788,36 +1788,51 @@ public class limayouxuanCase {
 
     }
 
-    //特产~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    @Test(testName = "查询特产列表、id进入详情、添加购物车、查询购物车列表、编辑购物车、删除购物车记录", description = "查询特产列表、id进入详情、添加购物车、查询购物车列表、编辑购物车、删除购物车记录" )
+    //特产~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    @Test(testName = "查询特产列表、id进入详情", description = "查询特产列表、id进入详情" )
     public void specialty() {
         try {
             String tem = "";
             TestCase testCase = caseList.get(0);
-            //插入特产、特产规格、特产图片
-            ResultSet resultSet = JdbcUtils.getResult(testCase.getDBsql().getSqlList().get(4),testCase.getDBsql().getJdbc());
-            ResultSet resultSet1 = JdbcUtils.getResult(testCase.getDBsql().getSqlList().get(5),testCase.getDBsql().getJdbc());
-            ResultSet resultSet2 = JdbcUtils.getResult(testCase.getDBsql().getSqlList().get(6),testCase.getDBsql().getJdbc());
-            ResultSet resultSet3 = JdbcUtils.getResult(testCase.getDBsql().getSqlList().get(11),testCase.getDBsql().getJdbc());
+            //插入特产产品
+            ResultSet resultSet = JdbcUtils.getResult(testCase.getDBsql().getSqlList().get(4), testCase.getDBsql().getJdbc());
+            //插入特产规格
+            ResultSet resultSet1 = JdbcUtils.getResult(testCase.getDBsql().getSqlList().get(5), testCase.getDBsql().getJdbc());
+            //插入特产图片
+            ResultSet resultSet2 = JdbcUtils.getResult(testCase.getDBsql().getSqlList().get(6), testCase.getDBsql().getJdbc());
+            //插入特产详情
+            ResultSet resultSet3 = JdbcUtils.getResult(testCase.getDBsql().getSqlList().get(7), testCase.getDBsql().getJdbc());
             baseURI = suit.getBaseurl();
-              //查询特产列表
+            //查询特产列表
             Response response =
-                given()
-                        .contentType("application/x-www-form-urlencoded;charset=utf-8")
-                        .formParam("tenantId", params.get("tenantId"))
-                        .formParam("productName", "")
-                        .formParam("currentPage", "1")
-                        .formParam("pageSize", "10")
-                        .request(Method.POST, "/web/specialty/queryPage")
-                        .then()
-                        .body("resultCode", equalTo(8200))
-                        .extract()
-                        .response();
+                    given()
+                            .contentType("application/x-www-form-urlencoded;charset=utf-8")
+                            .formParam("tenantId", params.get("tenantId"))
+                            .formParam("productName", "")
+                            .formParam("currentPage", "1")
+                            .formParam("pageSize", "10")
+                            .request(Method.POST, "/web/specialty/queryPage")
+                            .then()
+                            .body("resultCode", equalTo(8200))
+                            .extract()
+                            .response();
 
-        }finally {
+        } finally {
+            try {
+                String tem = "";
+                TestCase testCase = caseList.get(0);
+                ResultSet resultSet = JdbcUtils.getResult(testCase.getDBsql().getSqlList().get(8), testCase.getDBsql().getJdbc());
+                while (resultSet.next()) {
+                    tem = resultSet.getString("product_name");
+                }
+                Assert.assertEquals("插入特产", tem);
+                //Assert.assertNotEquals("",tem);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
-             //根据id进入详情
-            Response response1 =
+        //根据id进入详情
+        Response response1 =
                 given()
                         .contentType("application/x-www-form-urlencoded;charset=utf-8")
                         .formParam("tenantId", params.get("tenantId"))
@@ -1825,9 +1840,13 @@ public class limayouxuanCase {
                         .request(Method.POST, "/web/specialty/queryById")
                         .then()
                         .body("message", equalTo(""))
-                        .body("resultCode",equalTo(8200))
+                        .body("resultCode", equalTo(8200))
                         .extract()
                         .response();
+    }
+
+    @Test(testName = "添加购物车、查询购物车列表、编辑购物车、删除购物车记录", description = "添加购物车、查询购物车列表、编辑购物车、删除购物车记录",dependsOnMethods = "specialty")
+    public void cartinfo() {
            //添加购物车
             Response response2 =
                 given()
@@ -1901,30 +1920,6 @@ public class limayouxuanCase {
 
 
     }
-
-
-
-     /*
-    @Story("插入特产")
-    @Test(description = "通过sql语句查询数据库信息，进行断言")
-    public void specialty_assert(){
-        try {
-            String tem="";
-            TestCase testCase = caseList.get(0);
-            ResultSet resultSet = JdbcUtils.getResult(testCase.getDBsql().getSqlList().get(4), testCase.getDBsql().getJdbc());
-            ResultSet resultSet1 = JdbcUtils.getResult(testCase.getDBsql().getSqlList().get(10), testCase.getDBsql().getJdbc());
-            while (resultSet.next()){
-                tem = resultSet.getString("product_name");
-            }
-            Assert.assertEquals("插入特产", tem);
-            //Assert.assertNotEquals("",tem);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-    }
-
-      */
-
     //特产收货地址
     @Test(testName = "新增收货地址、查询收货地址、查询收货地址详情、修改收货地址、删除收货地址", description = "新增收货地址、查询收货地址、查询收货地址详情、修改收货地址、删除收货地址" )
     public void DeliveryAddress() {
@@ -2014,9 +2009,6 @@ public class limayouxuanCase {
                         .body("resultCode",equalTo(8200))
                         .extract()
                         .response();
-
-
-
     }
     //查询特产列表-必填项为空
     @Test(testName = "查询特产列表-必填项为空", description = "查询特产列表-必填项为空" )
@@ -2336,11 +2328,12 @@ public class limayouxuanCase {
         //删除id=735525580992151552
         ResultSet resultSet1 = JdbcUtils.getResult(testCase.getDBsql().getSqlList().get(3), testCase.getDBsql().getJdbc());
         //删除特产
-        ResultSet resultSet2 = JdbcUtils.getResult(testCase.getDBsql().getSqlList().get(7),testCase.getDBsql().getJdbc());
+        ResultSet resultSet2 = JdbcUtils.getResult(testCase.getDBsql().getSqlList().get(8),testCase.getDBsql().getJdbc());
         //删除特产规格
-        ResultSet resultSet3 = JdbcUtils.getResult(testCase.getDBsql().getSqlList().get(8),testCase.getDBsql().getJdbc());
+        ResultSet resultSet3 = JdbcUtils.getResult(testCase.getDBsql().getSqlList().get(10),testCase.getDBsql().getJdbc());
         //删除特产图片
-        ResultSet resultSet4 = JdbcUtils.getResult(testCase.getDBsql().getSqlList().get(9),testCase.getDBsql().getJdbc());
-
+        ResultSet resultSet4 = JdbcUtils.getResult(testCase.getDBsql().getSqlList().get(11),testCase.getDBsql().getJdbc());
+        //删除特产详情
+        ResultSet resultSet5 = JdbcUtils.getResult(testCase.getDBsql().getSqlList().get(12),testCase.getDBsql().getJdbc());
     }
 }
