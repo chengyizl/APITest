@@ -80,7 +80,7 @@ public class limayouxuanCase {
         jedis.auth("Lishi@s127");
     }
 
-    //h5登录~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    //h5登录~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     //正常登录成功
     @Test(testName = "登录-正常登录成功", description = "登录-正常登录成功")
     public void login(ITestContext context) {
@@ -180,7 +180,7 @@ public class limayouxuanCase {
 
     }
 
-   //首页~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   //首页~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     //首页未传入tanantid、cityCode
     @Test(testName = "首页-未传入tanantid、cityCode", description = "首页-未传入tanantid、cityCode")
     public void Homepage_null() {
@@ -261,8 +261,7 @@ public class limayouxuanCase {
                 .formParam("areaNumbers", "1")
                 .request(Method.POST, "/web/sowing/querySowingProduct")
                 .then()
-                //.body("message", equalTo("查询成功"))
-                //返回code为8200
+                .body("message", equalTo("查询成功"))
                 .body("resultCode", equalTo(8200));
     }
 
@@ -409,7 +408,6 @@ public class limayouxuanCase {
                 .formParam("tenantId", "")
                 .request(Method.POST, "/web/ticket/queryTicketDetail")
                 .then()
-                //或者景区门票不能为空
                 .body("message",equalTo("门票id不能为空"))
                 .body("resultCode", equalTo(9002));
 
@@ -1794,6 +1792,10 @@ public class limayouxuanCase {
         try {
             String tem = "";
             TestCase testCase = caseList.get(0);
+
+            //删除特产
+            ResultSet resultSet4 = JdbcUtils.getResult(testCase.getDBsql().getSqlList().get(9),testCase.getDBsql().getJdbc());
+
             //插入特产产品
             ResultSet resultSet = JdbcUtils.getResult(testCase.getDBsql().getSqlList().get(4), testCase.getDBsql().getJdbc());
             //插入特产规格
@@ -1844,9 +1846,41 @@ public class limayouxuanCase {
                         .extract()
                         .response();
     }
+    @Test(testName = "特产新增", description = "特产新增")
+    public void specialty1() {
+        baseURI = suit.getBaseurl();
+        Response response =
+        given()
+                .formParam("productName", "测试产品名称3")
+                .formParam("photo", "/202008/06/78d1c0f9-78cc-46e3-bba2-1b33121e8ae7.jpg")
+                .formParam("specialtyType", "")
+                .formParam("transportTypeCode", "default_transport")
+                .formParam("skus", "[object Object]")
+                .formParam("virtualSales","400")
+                .formParam("cancelRule","1")
+                .formParam("introduce","特产介绍描述")
+                .formParam("purchaseNotice","购买须知描述")
+                .formParam("id","")
+                .formParam("skuInfos","[{\"costPrice\":300,\"retailPrice\":200,\"salePrice\":0.01,\"skuName\":\"规格1\",\"stock\":999}]")
+                .formParam("provinceCode","330000000000")
+                .formParam("cityCode","330100000000")
+                .formParam("tenantId",params.get("tenantId"))
+                .formParam("isSelling","1")
+                .request(Method.POST, "/saasmanager/specialty/add")
+                .then()
+                //.body("message",equalTo(""))
+                .body("resultCode", equalTo(8200))
+                .extract()
+                .response();
+                String specialtyId = response.path("data");
+                params.put("ID",specialtyId);
+
+
+    }
+
 
     @Test(testName = "添加购物车、查询购物车列表、编辑购物车、删除购物车记录", description = "添加购物车、查询购物车列表、编辑购物车、删除购物车记录",dependsOnMethods = "specialty")
-    public void cartinfo() {
+    public void addcart() {
            //添加购物车
             Response response2 =
                 given()
@@ -1917,7 +1951,6 @@ public class limayouxuanCase {
                         .body("resultCode",equalTo(8200))
                         .extract()
                         .response();
-
 
     }
     //特产收货地址
@@ -2328,7 +2361,7 @@ public class limayouxuanCase {
         //删除id=735525580992151552
         ResultSet resultSet1 = JdbcUtils.getResult(testCase.getDBsql().getSqlList().get(3), testCase.getDBsql().getJdbc());
         //删除特产
-        ResultSet resultSet2 = JdbcUtils.getResult(testCase.getDBsql().getSqlList().get(8),testCase.getDBsql().getJdbc());
+        ResultSet resultSet2 = JdbcUtils.getResult(testCase.getDBsql().getSqlList().get(9),testCase.getDBsql().getJdbc());
         //删除特产规格
         ResultSet resultSet3 = JdbcUtils.getResult(testCase.getDBsql().getSqlList().get(10),testCase.getDBsql().getJdbc());
         //删除特产图片
