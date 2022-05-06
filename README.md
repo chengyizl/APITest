@@ -19,7 +19,7 @@
 - 2.确认Demo2TestCase.java中 preConditions方法中读取的数据文件TestCaseData/testDemo1.json是存在
 - 3.在resource中查看测试类中读取的数据，确认无误
 - 4.在resource/testNg/testng.xml 文件中查看class配置，确认配置的测试类是Demo2TestCase(可以配置多个class)
-- 5.查看pom文件中suiteXmlFile 配置的内容，确认是读取resource/testNg/testng.xml内容(只能有一条该数据)
+- 5.查看pom文件中suiteXmlFile配置的内容，确认是读取resource/testNg/testng.xml内容(只能有一条该数据)
 - 6.项目根目录运行命令 mvn clean test
 - 7.项目根目录 运行allure serve target或allure-results  查看结果报告
 
@@ -167,7 +167,7 @@ get("/lotto").then().body("lotto.winners.winnerId", hasItems(23, 54));
 1. 安装 brew install allure (mac 环境)
 
 2. 安装 npm install allure (node 环境)
-
+aal
 3. 参见https://www.cnblogs.com/wsy1103/p/10530397.html  （windows环境）
 
 3. 通过allure --version  查看是否安装成功
